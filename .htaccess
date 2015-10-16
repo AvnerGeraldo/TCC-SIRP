@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteCond %{SCRIPT_FILENAME} !-f
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1
+
+AddType application/x-httpd-php .js
+AddHandler x-httpd-php5 .js
+
+<FilesMatch "\.(js|php)$">
+SetHandler application/x-httpd-php
+</FilesMatch>
