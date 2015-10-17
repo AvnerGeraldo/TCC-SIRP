@@ -41,4 +41,20 @@ class Restaurante_model extends CI_Model
 
 		return $result;
 	}
+
+	public function cadastrarRestaurante($arrayRestaurante)
+	{
+		$result 		= null;
+
+		$listaRestaurante 	= $this->listaRestaurante( null, $arrayRestaurante['nomeRestaurante'], $arrayRestaurante['cidade'], $arrayRestaurante['horarioFuncionamentoInicial'], $arrayRestaurante['horarioFuncionamentoFinal']);
+		if( !empty($listaRestaurante) ) {
+			foreach ($listaRestaurante as $rest) {
+				$this->_db->where("id_restaurante", $rest['id_restaurante']);
+				$result = $this->_db->update("restaurante", $arrayRestaurante);
+			}			
+		} else {
+			$result = $this->_db->insert("restaurante", $arrayRestaurante);
+		}
+		return $result;
+	}
 }

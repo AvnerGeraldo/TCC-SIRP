@@ -11,6 +11,38 @@ class AdminController extends CI_Controller
 		$this->load->view("footer");
 	}
 
+	public function cadastrarRestaurante()
+	{
+		$result = null;
+		extract($_POST);
+		if( isset($nomeRest, $telRest_1, $enderecoRest, $bairroRest, $cidadeRest, $cboEstadoRest, $horarioIniRest, $horarioFimRest) &&
+			!empty($nomeRest) && !empty($telRest_1) && !empty($enderecoRest) && !empty($bairroRest) && !empty($cidadeRest) && !empty($cboEstadoRest) && !empty($horarioIniRest) && !empty($horarioFimRest) ) {
+			$this->load->model("Restaurante_model", "mRest");
+
+			$arrayRestauranteBD 								= null;
+			$arrayRestauranteBD['nomeRestaurante'] 				= $nomeRest;
+			$arrayRestauranteBD['nomeFantasia'] 				= $nomeFantasiaRest;
+			$arrayRestauranteBD['descricaoRestaurante'] 		= $descricaoRest;
+			$arrayRestauranteBD['cnpj'] 						= retiraCaracteres($cnpjRest);
+			$arrayRestauranteBD['logradouro'] 					= $enderecoRest;
+			$arrayRestauranteBD['complemento'] 					= $complementoRest;
+			$arrayRestauranteBD['bairro'] 						= $bairroRest;
+			$arrayRestauranteBD['cidade'] 						= $cidadeRest;
+			$arrayRestauranteBD['cep'] 							= retiraCaracteres($cepRest);
+			$arrayRestauranteBD['uf'] 							= $cboEstadoRest;
+			$arrayRestauranteBD['telefone1'] 					= retiraCaracteres($telRest_1);
+			$arrayRestauranteBD['telefone2'] 					= retiraCaracteres($telRest_2);
+			$arrayRestauranteBD['horarioFuncionamentoInicial'] 	= formataDataBanco($horarioIniRest, 'S');
+			$arrayRestauranteBD['horarioFuncionamentoFinal'] 	= formataDataBanco($horarioFimRest, 'S');
+			$arrayRestauranteBD['statusRestaurante'] 			= 'A';
+
+			$result = $this->mRest->cadastrarRestaurante($arrayRestauranteBD);
+		}
+
+		echo json_encode($result);
+		exit;
+	}
+
 	public function cadastrarMesa()
 	{
 		$result = null;

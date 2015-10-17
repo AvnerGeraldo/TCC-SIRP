@@ -178,6 +178,10 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-7">
                                     <input type="text" name="txtBairro" id="txtBairro" placeholder="Escreva aqui o bairro" class="form-control">
                                 </div>
+                                <label for="txtCep" class="col-lg-1 col-md-1 col-sm-1 col-xs-3 col-lg-offset-0 col-md-offset-0 col-sm-offset-0 col-xs-offset-1">Cep:</label>
+                                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
+                                    <input type="text" name="txtCep" id="txtCep" class="form-control">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="txtCidade" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">Cidade:</label>

@@ -1,5 +1,7 @@
+var url 		= "/sirp/";
 $(document).ready(function() {
 	$("#txtCNPJ").mask("00.000.000/0000-00");
+	$("#txtCep").mask("00.000-000");
 	$("#txtHorarioFuncionamentoInicial").mask("00/00/0000 00:00:00");
 	$("#txtHorarioFuncionamentoFinal").mask("00/00/0000 00:00:00");
 	$("#txtTelefone1").mask("(00) 0000-0000)");
@@ -10,6 +12,7 @@ $(document).ready(function() {
 
 		//Variaveis
 		cnpjRest 			= $("#txtCNPJ").val();
+		cepRest 			= $("#txtCep").val();
 		nomeRest 			= $("#txtNomeRestaurante").val();
 		nomeFantasiaRest	= $("#txtNomeFantasia").val();
 		descricaoRest		= $("#txtDescricao").val();
@@ -29,11 +32,25 @@ $(document).ready(function() {
 		console.log(arrayImagens);
 		//----------------------------------------------------------------------------
 
-		if( cnpjRest != "" && nomeRest != "" && enderecoRest != "" && bairroRest != "" && cidadeRest != ""
-			&& cboEstadoRest != "" && telRest_1 != "" && horarioIniRest != "" && horarioFimRest != "" ) {
+		if( cnpjRest != "" && nomeRest != "" && enderecoRest != "" && bairroRest != "" && cidadeRest != "" && cboEstadoRest != "" && telRest_1 != "" && horarioIniRest != "" && horarioFimRest != "" ) {
 			$.post(
+				url + "Restaurante/cadastrar"
 			{
-
+				cnpjRest 		,
+				cepRest 		,
+				nomeRest 		,
+				nomeFantasiaRest,
+				descricaoRest	,
+				telRest_1 		,
+				telRest_2 		,
+				arrayImagens	,
+				enderecoRest	,
+				complementoRest	,
+				bairroRest		,
+				cidadeRest		,
+				cboEstadoRest	,
+				horarioIniRest	,
+				horarioFimRest	
 			}, function( retornoCadastraRestaurante ) {
 				retornoCadastraRestaurante = $.parseJSON(retornoCadastraRestaurante);
 
