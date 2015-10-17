@@ -13,7 +13,70 @@ class AdminController extends CI_Controller
 
 	public function cadastrarEvento()
 	{
-		
+
+		if(! isset($_SESSION) ) {
+			session_start();
+		}
+
+		if(! isset($_SESSION['restaurante']) ) {
+			session_destroy();
+			alertMessage("Erro ao tentar acessar a página.\nPor favor faça o login novamente!", base_url());
+			exit;
+		}
+
+		if( isset($_POST['txtEvento'], $_POST['txtDataHora']) && !empty($_POST['txtEvento'])
+			&& !empty($_POST['txtDataHora']) && !empty($_SESSION['restaurante']) ) {
+			$this->load->model("admin/Evento_model", "mEvento");
+			extract($_POST);
+			
+			if( isset($_FILES['txtImagemEvento']['name']) && !empty($_FILES['txtImagemEvento']['name']) ) {
+				$arquivo 			= $_FILES['txtImagemEvento'];
+				$diretorioArquivo 	= $_SERVER['DOCUMENT_ROOT']."/sirp/web-files/imagens/restaurantes/{$_SESSION['restaurante']}";
+
+				//Criando Pasta dos eventos do restaurante
+				if (!is_dir($diretorioArquivo)) {
+		            umask(0777);
+		            mkdir($diretorioArquivo);
+		            chmod($diretorioArquivo, 0777);
+		        }
+		        $diretorioArquivo .= "/eventos";
+		        if (!is_dir($diretorioArquivo)) {
+		            umask(0777);
+		            mkdir($diretorioArquivo);
+		            chmod($diretorioArquivo, 0777);
+		        }
+		        //--------------------------------------------------------  
+
+				$retornoUpload = uploadArquivo($arquivo, $diretorioArquivo);
+
+				if( !empty($retornoUpload) ) {					
+					$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-danger alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Erro de upload: {$retornoUpload}\nNão foi possível cadastrar evento.</div>";
+					
+				}
+			}
+
+			if( !isset($arrayDadosTela['exibeMensagem']) ) {
+				$arrayEventoBD 						= null;
+				$arrayEventoBD['nomeEvento'] 		= $txtEvento;
+				$arrayEventoBD['descricaoEvento'] 	= ( isset($txtDescricao) && !empty($txtDescricao) ? $txtDescricao : null );
+				$arrayEventoBD['dataHora'] 			= formataDataBanco($txtDataHora, 'S');
+				$arrayEventoBD['linkEvento'] 		= ( isset($txtLinkEvento) && !empty($txtLinkEvento) ? $txtLinkEvento : null );
+				$arrayEventoBD['imagemEvento'] 		= ( isset($arquivo['name']) && !empty($arquivo['name']) ? $arquivo['name'] : null );
+				$arrayEventoBD['id_restaurante'] 	= $_SESSION['restaurante'];
+
+				$retorno = $this->mEvento->cadastrarEvento($arrayEventoBD);
+
+				if( $retorno ) {
+					$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-success alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Cadastro de evento realizado com sucesso!</div>";
+				}
+			}
+		}
+
+		$this->load->view("header");
+		$this->exibeMenu();
+		$this->load->view("administracao/admin/eventos", $arrayDadosTela);
+		$this->load->view("footer");
+
 	}
 
 

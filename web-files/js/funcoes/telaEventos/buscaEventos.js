@@ -59,30 +59,31 @@ $(document).ready(function() {
 				$("#tbListaEventos").show();
 				$.each(retornoPesquisa, function(index, value) {
 					linha = "<tr>";
-					linha += "<td>" + value['nomeEvento'] + "</td>";
-					linha += "<td>" + value['dataHora'] + "</td>";
+					linha += "<td>" + ( value['nomeEvento'] != null ? value['nomeEvento'] : '' ) + "</td>";
+					linha += "<td>" + ( value['dataHora'] != null ? value['dataHora'] : '' ) + "</td>";
 					linha += "<td><a id='visualizarEvento_" + value['id_evento'] + "'><span class='glyphicon glyphicon-search'></span></a></td>";
-					linha += "<td>" + value['descricaoEvento'] + "</td>";
-					linha += "<td>" + value['linkEvento'] + "</td>";
-					linha += "<td>" + value['imagemEvento'] + "</td>";
+					linha += "<td>" + ( value['descricaoEvento'] != null ? value['descricaoEvento'] : '' ) + "</td>";
+					linha += "<td>" + ( value['linkEvento'] != null ? value['linkEvento'] : '' ) + "</td>";
+					linha += "<td>" + ( value['imagemEvento'] != null ? value['imagemEvento'] : '' ) + "</td>";
 					linha += "</tr>";
 					$("#tbListaEventos tbody").append(linha);					
 
 					$("#visualizarEvento_" + value['id_evento']).click( function() {
 						limparFormulario();
 						campos = $( this ).parent().parent("tr");
-						$("#txtEvento").val(campos.find("td:nth-child(1)"));
-						$("#txtDescricao").val(campos.find("td:nth-child(4)"));
-						$("#txtLinkEvento").val(campos.find("td:nth-child(5)"));
-						//$("#txtImagemEvento").val(campos.find("td:nth-child(1)"));
-						$("#txtDataHora").val(campos.find("td:nth-child(2)"));
+						console.log(campos);
+						$("#txtEvento").val(campos.find("td:nth-child(1)").text());
+						$("#txtDescricao").val(campos.find("td:nth-child(4)").text());
+						$("#txtLinkEvento").val(campos.find("td:nth-child(5)").text());
+						//$("#txtImagemEvento").val(campos.find("td:nth-child(1)").text());
+						$("#txtDataHora").val(campos.find("td:nth-child(2)").text());
 					});
 				});
 
 				//Escondendo tds
-				$("#tbListaEventos tbody tr td:nth-child(3)").hide();
 				$("#tbListaEventos tbody tr td:nth-child(4)").hide();
 				$("#tbListaEventos tbody tr td:nth-child(5)").hide();
+				$("#tbListaEventos tbody tr td:nth-child(6)").hide();
 				//-------------------------------------------------------------------
 			}
 		);

@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="<?=base_url('web-files/css/admin/estiloPageAdmin.css')?>">
 <div class="container-fluid well">
 	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
-		
+		<?=( isset($exibeMensagem) ? $exibeMensagem : '' )?>
 		<form name="frmEvento" method="POST" action="<?=base_url('Eventos/cadastrar')?>" enctype="multipart/form-data" class="form-horizontal">
 			<div class="form-group">
 				<label for="txtEvento" class="col-lg-2 col-md-2 col-sm-2 col-xs-4">Evento:</label>
@@ -46,7 +46,7 @@
 
 			<div class="form-group">
 				<button type="button" name="btnPesquisar" class="btn btn-primary">Pesquisar</button>
-				<button type="button" name="btnCadastrar" class="btn btn-success">Cadastrar</button>
+				<button type="submit" name="btnCadastrar" class="btn btn-success">Cadastrar</button>
 			</div>
 		</form>
 

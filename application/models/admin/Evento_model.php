@@ -43,4 +43,19 @@ class Evento_model extends CI_Model
 		return $result;
 	}
 
+	public function cadastrarEvento($arrayEvento)
+	{
+		$result 		= null;
+		$listaEvento 	= $this->listaEventos($arrayEvento['nomeEvento'], $arrayEvento['dataHora'], $arrayEvento['dataHora']);
+		if( !empty($listaEvento) ) {
+			foreach ($listaEvento as $evento) {
+				$this->_db->where("id_evento", $evento['id_evento']);
+				$result = $this->_db->update("evento", $arrayEvento);
+			}			
+		} else {
+			$result = $this->_db->insert("evento", $arrayEvento);
+		}
+		return $result;
+	}
+
 }

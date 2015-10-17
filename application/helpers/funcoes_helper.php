@@ -307,6 +307,7 @@ function uploadArquivo($arquivo, $diretorio, $arrayTiposAceitos = null, $max_upl
         if (!is_dir($diretorio)) {
             umask(0777);
             mkdir($diretorio);
+            chmod($diretorio, 0777);
         }        
         if (move_uploaded_file($arquivo['tmp_name'], "{$diretorio}/{$nome}")) {
             $resultado = "";                
