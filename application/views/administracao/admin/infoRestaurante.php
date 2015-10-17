@@ -60,6 +60,19 @@
                             </div>
 
                             <div class="form-group">
+                                <label for="txtHorarioFuncionamento" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">Horário de Funcionamento:</label>
+                                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+                                    <input type="text" name="txtHorarioFuncionamentoInicial" id="txtHorarioFuncionamentoInicial" class="form-control">
+                                </div>
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                                    a
+                                </div>
+                                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4 col-lg-offset-0 col-md-offset-0 col-sm-offset-0 col-xs-offset-4">
+                                    <input type="text" name="txtHorarioFuncionamentoFinal" id="txtHorarioFuncionamentoFinal" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="txtImagemRestaurante" class="col-lg-11 col-md-11 col-sm-11 col-xs-11 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">Imagens:</label>
                             </div>
                             <div class="form-group">
@@ -141,6 +154,9 @@
                                     </div>                                  
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <button type="button" name="btnCadastraInfoRestaurante" class="btn btn-success">Cadastrar</button>
+                            </div>
                         </form>                       
                     </div>
                     <div class="tab-pane fade" id="tabInfoEndereco">
@@ -203,7 +219,9 @@
                                     </select>
                                 </div>
                             </div>
-
+                            <div class="form-group">
+                                <button type="button" name="btnCadastraInfoRestaurante" class="btn btn-success">Cadastrar</button>
+                            </div>
                         </form>
                     </div>
                     <div class="tab-pane fade" id="tabInfoMesas">
@@ -236,13 +254,11 @@
                             </div>
                         </form>
                     </div>                    
-                    <div class="form-group">
-                        <button type="button" class="btn btn-success">Cadastrar</button>
-                    </div>
                 </div>                
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript" src="<?=base_url('web-files/js/funcoes/telaRestaurante/viewImagensUpload.js')?>"></script>
+<script type="text/javascript" src="<?=base_url('web-files/js/funcoes/telaRestaurante/infoRestaurante.js')?>"></script>
 <script type="text/javascript" src="<?=base_url('web-files/js/funcoes/telaRestaurante/adicionarMesas.js')?>"></script>
