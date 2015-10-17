@@ -15,7 +15,7 @@ class AdminController extends CI_Controller
 	{
 		$result = null;
 		if( isset($_POST['numeroMesa'], $_POST['qtdLugarMesa']) && !empty($_POST['numeroMesa']) && !empty($_POST['qtdLugarMesa']) ) {
-			$this->load->model("admin/Mesa_model.php", "mMesa");
+			$this->load->model("admin/Mesa_model", "mMesa");
 			extract($_POST);
 
 			//Verificar acesso do restaurante
@@ -29,8 +29,8 @@ class AdminController extends CI_Controller
 				exit;
 			}
 			//---------------------------------------------------------------------------------------------------
-
-			$arrayMesaBD = null;
+			
+			$arrayMesaBD 					= null;
 			$arrayMesaBD['num_mesa'] 		= $numeroMesa;
 			$arrayMesaBD['qtdLugaresMesa'] 	= $qtdLugarMesa;
 			$arrayMesaBD['taxaMesa'] 		= ( isset($taxaMesa) ? $taxaMesa : 0 );
@@ -144,6 +144,29 @@ class AdminController extends CI_Controller
 				}
 			}
 		}
+
+		echo json_encode($retorno);
+		exit;
+	}
+	
+	public function pesquisarMesas()
+	{
+		$retorno = null;		
+		$this->load->model("admin/Mesa_model", "mMesa");
+		extract($_POST);
+
+		$count 			= 0;
+		$listaEventos 	= $this->mMesa->listaMesa();
+		if( !empty($listaEventos) ) {
+			foreach ($listaEventos as $evento) {
+				$retorno[$count]['id_mesa'] 		= $evento['id_mesa'];
+				$retorno[$count]['num_mesa'] 		= $evento['num_mesa'];
+				$retorno[$count]['qtdLugaresMesa']	= $evento['qtdLugaresMesa'];				
+				$retorno[$count]['taxaMesa'] 		= formataValorExibir($evento['taxaMesa']);				
+				$count++;
+			}
+		}
+		
 
 		echo json_encode($retorno);
 		exit;

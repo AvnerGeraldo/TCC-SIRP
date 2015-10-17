@@ -39,18 +39,10 @@ class Mesa_model extends CI_Model
 	{
 		$result 		= null;
 
-		if(! isset($_SESSION) ) {
-			session_start();
-		}
-
-		if(! isset($_SESSION['restaurante']) ) {
-			return $result;
-		}
-
 		$listaMesa 	= $this->listaMesa( $arrayMesa['num_mesa'] );
 		if( !empty($listaMesa) ) {
 			foreach ($listaMesa as $mesa) {
-				$this->_db->where("id_restaurante", $_SESSION['restaurante']);
+				$this->_db->where("id_restaurante", $mesa['id_restaurante']);
 				$this->_db->where("id_mesa", $mesa['id_mesa']);
 				$result = $this->_db->update("mesa", $arrayMesa);
 			}			

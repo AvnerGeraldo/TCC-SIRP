@@ -64,6 +64,7 @@ $route['Eventos/cadastrar'] 		= 'AdminController/cadastrarEvento';
 
 //Pesquisas
 $route['Restaurante/pesquisarEventos'] = 'AdminController/pesquisarEventos';
+$route['Restaurante/pesquisarMesas'] = 'AdminController/pesquisarMesas';
 //---------------------------------------------------------------------------------
 
 
