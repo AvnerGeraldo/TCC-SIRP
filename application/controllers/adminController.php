@@ -12,6 +12,35 @@ class AdminController extends CI_Controller
 	}
 
 
+	//Pesquisas
+	public function pesquisarEventos()
+	{
+		$retorno = null;
+		if( isset($_POST['nomeEvento']) && !empty($_POST['nomeEvento']) || isset($_POST['dataHoraEvento'], $_POST['dataHoraEventoFinal']) && !empty($_POST['dataHoraEvento']) && !empty($_POST['dataHoraEventoFinal']) ) {
+			$this->load->model("admin/Evento_model", "mEvento");
+			extract($_POST);
+
+			$count 			= 0;
+			$listaEventos 	= $this->mEvento->listaEventos($nomeEvento, $dataHoraInicial, $dataHoraFinal);
+			foreach ($listaEventos as $evento) {
+				$retorno[$count]['id_evento'] 		= $evento['id_evento'];
+				$retorno[$count]['nomeEvento'] 		= $evento['nomeEvento'];
+				$retorno[$count]['descricaoEvento']	= $evento['descricaoEvento'];				
+				$retorno[$count]['dataHora'] 		= formataDataExibir($evento['dataHora']);
+				$retorno[$count]['linkEvento'] 		= $evento['linkEvento'];
+				$retorno[$count]['imagemEvento'] 	= $evento['imagemEvento'];
+				$retorno[$count]['id_restaurante'] 	= $evento['id_restaurante'];
+				$count++;
+			}
+		}
+
+		echo json_encode($retorno);
+		exit;
+	}
+
+	//--------------------------------------------------------------------------------------------------------------
+
+
 	private function exibeMenu()
 	{
 		if(! isset($_SESSION) ) {
