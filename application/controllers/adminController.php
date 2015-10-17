@@ -79,6 +79,7 @@ class AdminController extends CI_Controller
 
 	}
 
+	
 
 	//Pesquisas
 	public function pesquisarEventos()

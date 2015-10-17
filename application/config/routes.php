@@ -52,6 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] 	= 'AcessoController';
 $route['Eventos'] 				= 'AdminController/eventos';
 $route['Eventos/cadastrar'] 	= 'AdminController/cadastrarEvento';
+$route['Logoff'] 				= 'AcessoController/logoff';
 
 
 

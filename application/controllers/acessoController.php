@@ -84,6 +84,15 @@ class AcessoController extends CI_Controller
 		$this->load->view("footer");
 	}
 
+	public function logoff()
+	{
+		if( !isset($_SESSION) ) {
+			session_start();
+		}
+		session_destroy();		
+		alertMessage("Saindo do sistema...", base_url());
+	}
+
 
 	private function exibeMenu()
 	{

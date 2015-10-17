@@ -43,10 +43,18 @@
 			</ul>
 
 			<li>
-				<a href="#" id="logout-system">
+				<a href="#" onclick="return logoff();" id="logout-system">
 					<i class="fa fa-power-off fa-lg"></i> Logoff
 				</a>
 			</li>
 		</ul>
 	</div>
 </div>
+<script type="text/javascript">
+function logoff()
+{
+	if( confirm("Deseja sair do sistema?") ) {
+		window.location.href = "/sirp/Logoff";
+	}
+}
+</script>
