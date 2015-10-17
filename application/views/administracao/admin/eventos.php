@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="<?=base_url('web-files/css/admin/estiloPageAdmin.css')?>">
 <div class="container-fluid well">
-	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+	<div class="col-lg-8 col-md-8 col-sm-9 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
 		<?=( isset($exibeMensagem) ? $exibeMensagem : '' )?>
 		<form name="frmEvento" method="POST" action="<?=base_url('Eventos/cadastrar')?>" enctype="multipart/form-data" class="form-horizontal">
 			<div class="form-group">

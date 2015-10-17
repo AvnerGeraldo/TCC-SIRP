@@ -11,6 +11,38 @@ class AdminController extends CI_Controller
 		$this->load->view("footer");
 	}
 
+	public function cadastrarMesa()
+	{
+		$result = null;
+		if( isset($_POST['numeroMesa'], $_POST['qtdLugarMesa']) && !empty($_POST['numeroMesa']) && !empty($_POST['qtdLugarMesa']) ) {
+			$this->load->model("admin/Mesa_model.php", "mMesa");
+			extract($_POST);
+
+			//Verificar acesso do restaurante
+			if(! isset($_SESSION) ) {
+				session_start();
+			}
+
+			if(! isset($_SESSION['restaurante']) ) {
+				session_destroy();
+				alertMessage("Erro ao tentar acessar a página.\nPor favor faça o login novamente!", base_url());
+				exit;
+			}
+			//---------------------------------------------------------------------------------------------------
+
+			$arrayMesaBD = null;
+			$arrayMesaBD['num_mesa'] 		= $numeroMesa;
+			$arrayMesaBD['qtdLugaresMesa'] 	= $qtdLugarMesa;
+			$arrayMesaBD['taxaMesa'] 		= ( isset($taxaMesa) ? $taxaMesa : 0 );
+			$arrayMesaBD['id_restaurante'] 	= $_SESSION['restaurante'];
+
+			$result = $this->mMesa->cadastrarMesa($arrayMesaBD);
+		} 
+
+		echo json_encode($result);
+		exit;
+	}
+
 	public function eventos()
 	{
 		$this->load->view("header");

@@ -40,7 +40,7 @@ $(document).ready(function() {
 		}
 
 		$.post(
-			url + "AdminController/pesquisarEventos",
+			url + "Restaurante/pesquisarEventos",
 			{
 				nomeEvento: nomeEvento,
 				dataHoraEvento: dataHoraEvento,
