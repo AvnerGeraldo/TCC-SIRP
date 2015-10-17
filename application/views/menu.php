@@ -26,10 +26,10 @@
 				<a href="#"><i class="fa fa-suitcase fa-lg"></i> Controlar Restaurante <span class="arrow"></span></a>
 			</li>
 			<ul class="sub-menu collapse out" id="links-restaurante">
-				<li>Cadastrar Informações</li>
-				<li>Cadastrar Funcionário</li>
-				<li>Cadastrar Cardápio</li>
-				<li>Cadastrar Produtos</li>
+				<li><a href="<?=base_url('Restaurante')?>">Cadastrar Informações</a></li>
+				<li><a href="<?=base_url('Funcionarios')?>">Cadastrar Funcionário</a></li>
+				<li><a href="<?=base_url('Cardapio')?>">Cadastrar Cardápio</a></li>
+				<li><a href="<?=base_url('Produtos')?>">Cadastrar Produtos</a></li>
 			</ul>
 
 			<li data-toggle="collapse" data-target="#links-relatorios" class="collapsed">

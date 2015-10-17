@@ -3,6 +3,14 @@
 class AdminController extends CI_Controller 
 {
 
+	public function restaurante()
+	{
+		$this->load->view("header");
+		$this->exibeMenu();
+		$this->load->view("administracao/admin/infoRestaurante");
+		$this->load->view("footer");
+	}
+
 	public function eventos()
 	{
 		$this->load->view("header");
