@@ -33,7 +33,7 @@ class AdminController extends CI_Controller
 			$arrayMesaBD 					= null;
 			$arrayMesaBD['num_mesa'] 		= $numeroMesa;
 			$arrayMesaBD['qtdLugaresMesa'] 	= $qtdLugarMesa;
-			$arrayMesaBD['taxaMesa'] 		= ( isset($taxaMesa) ? $taxaMesa : 0 );
+			$arrayMesaBD['taxaMesa'] 		= ( isset($taxaMesa) ? formataValorBanco($taxaMesa) : 0 );
 			$arrayMesaBD['id_restaurante'] 	= $_SESSION['restaurante'];
 
 			$result = $this->mMesa->cadastrarMesa($arrayMesaBD);

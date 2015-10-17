@@ -1,7 +1,9 @@
 var url 		= "/sirp/";
 var editaMesa 	= null;
 $(document).ready( function() {
-
+	$('#txtNumMesa').mask("000", {reverse: true});
+	$('#txtQtdLugares').mask("000", {reverse: true});
+	$('#txtTaxaMesa').mask("#.##0,00", {reverse: true});
 	buscarMesas();
 
 	$("#btnAddMesa").click( function() {
@@ -9,9 +11,9 @@ $(document).ready( function() {
 		qtdLugarMesa	= ( $("#txtQtdLugares").val() == "" ? 0 : $("#txtQtdLugares").val() );
 		taxaMesa 		= ( $("#txtTaxaMesa").val() == "" ? 0 : $("#txtTaxaMesa").val() );
 
-		numeroMesa 		= parseInt(numeroMesa);
-		qtdLugarMesa	= parseInt(qtdLugarMesa);
-		taxaMesa 		= parseFloat(taxaMesa);
+		numeroMesa 		= numeroMesa;
+		qtdLugarMesa	= qtdLugarMesa;
+		taxaMesa 		= taxaMesa;
 
 		if( numeroMesa == "" || numeroMesa == 0 || qtdLugarMesa == 0 || qtdLugarMesa == "" ) {
 			$(".error-message").remove();
@@ -45,7 +47,7 @@ $(document).ready( function() {
                     boxMesa += "<div class=\"row\">";
                     boxMesa += "<label for=\"txtTaxaMesa\" class=\"col-lg-3 col-md-3 col-sm-5 col-xs-6\">Valor Taxa:</label>";
                     boxMesa += "<div class=\"col-lg-3 col-md-3 col-sm-5 col-xs-6\">";
-                    boxMesa += "<span class='info-taxaMesa'>" + numeroMesa + "</span>";
+                    boxMesa += "<span class='info-taxaMesa'>" + taxaMesa + "</span>";
                     boxMesa += "</div>";
                     boxMesa += "</div>";
                     boxMesa += "</div>";
@@ -113,7 +115,14 @@ $(document).ready( function() {
 	}
 
 	editaMesa = function(elemento)
-	{
-		console.log(elemento);
+	{		
+		numeroMesa 		= $(elemento).parent().parent().find(".info-numeroMesa").text();
+		qtdLugarMesa	= $(elemento).parent().parent().find(".info-qtdLugarMesa").text();
+		taxaMesa 		= $(elemento).parent().parent().find(".info-taxaMesa").text();
+		$(elemento).parent().parent().remove();
+		$("#txtNumMesa").val(numeroMesa);
+		$("#txtQtdLugares").val(qtdLugarMesa);
+		$("#txtTaxaMesa").val(taxaMesa);
+
 	}
 });
