@@ -46,7 +46,15 @@ class Restaurante_model extends CI_Model
 	{
 		$result 		= null;
 
-		$listaRestaurante 	= $this->listaRestaurante( null, $arrayRestaurante['nomeRestaurante'], $arrayRestaurante['cidade'], $arrayRestaurante['horarioFuncionamentoInicial'], $arrayRestaurante['horarioFuncionamentoFinal']);
+		if(! isset($_SESSION) ) {
+			session_start();
+		}
+
+		if(! isset($_SESSION['restaurante']) ) {
+			return $result;
+		}
+		
+		$listaRestaurante 	= $this->listaRestaurante( $_SESSION['restaurante']);
 		if( !empty($listaRestaurante) ) {
 			foreach ($listaRestaurante as $rest) {
 				$this->_db->where("id_restaurante", $rest['id_restaurante']);

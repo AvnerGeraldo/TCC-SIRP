@@ -20,7 +20,7 @@
             <div class="panel-body">
                 <div class="tab-content">                    
                     <div class="tab-pane fade in active" id="tabInfoRestaurante">
-                        <form name="frmRestauranteInfo" class="form-horizontal">                                                 
+                        <form name="frmRestauranteInfo" method="POST" action="<?=base_url('Restaurante/cadastrar')?>" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group">
                                 <label for="txtCNPJ" class="col-lg-2 col-md-2 col-sm-2 col-xs-4 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">CNPJ:</label>
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-4">
@@ -155,12 +155,12 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button type="button" name="btnCadastraInfoRestaurante" class="btn btn-success">Cadastrar</button>
+                                <button type="submit" name="btnCadastraInfoRestaurante" class="btn btn-success">Cadastrar Restaurante</button>
                             </div>
                         </form>                       
                     </div>
                     <div class="tab-pane fade" id="tabInfoEndereco">
-                        <form name="frmRestauranteEndereco" class="form-horizontal">
+                        <form name="frmRestauranteEndereco" method="POST" action="<?=base_url('Restaurante/cadastrar')?>" class="form-horizontal">
                             <div class="form-group">
                                 <label for="txtLogradouro" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">Logradouro:</label>
                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
@@ -224,7 +224,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button type="button" name="btnCadastraInfoRestaurante" class="btn btn-success">Cadastrar</button>
+                                <button type="submit" name="btnCadastraInfoRestaurante" class="btn btn-success">Cadastrar Endereço</button>
                             </div>
                         </form>
                     </div>

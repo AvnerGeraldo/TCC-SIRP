@@ -13,34 +13,114 @@ class AdminController extends CI_Controller
 
 	public function cadastrarRestaurante()
 	{
-		$result = null;
+		
+		$this->load->model("admin/Restaurante_model", "mRest");
+		$result 			= null;
+		$erros 				= 0;
+		$arrayRestauranteBD = null;
+		$arrayDadosTela 	= null;
 		extract($_POST);
-		if( isset($nomeRest, $telRest_1, $enderecoRest, $bairroRest, $cidadeRest, $cboEstadoRest, $horarioIniRest, $horarioFimRest) &&
-			!empty($nomeRest) && !empty($telRest_1) && !empty($enderecoRest) && !empty($bairroRest) && !empty($cidadeRest) && !empty($cboEstadoRest) && !empty($horarioIniRest) && !empty($horarioFimRest) ) {
-			$this->load->model("Restaurante_model", "mRest");
 
-			$arrayRestauranteBD 								= null;
-			$arrayRestauranteBD['nomeRestaurante'] 				= $nomeRest;
-			$arrayRestauranteBD['nomeFantasia'] 				= $nomeFantasiaRest;
-			$arrayRestauranteBD['descricaoRestaurante'] 		= $descricaoRest;
-			$arrayRestauranteBD['cnpj'] 						= retiraCaracteres($cnpjRest);
-			$arrayRestauranteBD['logradouro'] 					= $enderecoRest;
-			$arrayRestauranteBD['complemento'] 					= $complementoRest;
-			$arrayRestauranteBD['bairro'] 						= $bairroRest;
-			$arrayRestauranteBD['cidade'] 						= $cidadeRest;
-			$arrayRestauranteBD['cep'] 							= retiraCaracteres($cepRest);
-			$arrayRestauranteBD['uf'] 							= $cboEstadoRest;
-			$arrayRestauranteBD['telefone1'] 					= retiraCaracteres($telRest_1);
-			$arrayRestauranteBD['telefone2'] 					= retiraCaracteres($telRest_2);
-			$arrayRestauranteBD['horarioFuncionamentoInicial'] 	= formataDataBanco($horarioIniRest, 'S');
-			$arrayRestauranteBD['horarioFuncionamentoFinal'] 	= formataDataBanco($horarioFimRest, 'S');
-			$arrayRestauranteBD['statusRestaurante'] 			= 'A';
-
-			$result = $this->mRest->cadastrarRestaurante($arrayRestauranteBD);
+		
+		//Verificar acesso do restaurante
+		if(! isset($_SESSION) ) {
+			session_start();
 		}
 
-		echo json_encode($result);
-		exit;
+		if(! isset($_SESSION['restaurante']) ) {
+			session_destroy();
+			alertMessage("Erro ao tentar acessar a página.\nPor favor faça o login novamente!", base_url());
+			exit;
+		}
+		//---------------------------------------------------------------------------------------------------			
+
+		if( isset($txtCNPJ, $txtNomeRestaurante, $txtTelefone1, $txtHorarioFuncionamentoInicial, $txtHorarioFuncionamentoFinal) && !empty($txtCNPJ) && !empty($txtNomeRestaurante) && !empty($txtTelefone1) && !empty($txtHorarioFuncionamentoInicial) && !empty($txtHorarioFuncionamentoFinal) ) {
+			$arrayRestauranteBD['cnpj'] 						= retiraCaracteres($txtCNPJ);
+			$arrayRestauranteBD['nomeRestaurante'] 				= $txtNomeRestaurante;
+			$arrayRestauranteBD['nomeFantasia'] 				= $txtNomeFantasia;
+			$arrayRestauranteBD['descricaoRestaurante'] 		= auto_typography($txtDescricao);			
+			$arrayRestauranteBD['telefone1'] 					= $txtTelefone1;
+			$arrayRestauranteBD['telefone2'] 					= $txtTelefone2;
+			$arrayRestauranteBD['horarioFuncionamentoInicial'] 	= formataDataBanco($txtHorarioFuncionamentoInicial, 'S');
+			$arrayRestauranteBD['horarioFuncionamentoFinal'] 	= formataDataBanco($txtHorarioFuncionamentoFinal, 'S');
+			$arrayRestauranteBD['statusRestaurante'] 			= 'A';			
+
+			if( isset($_FILES['txtImagemRestaurante']) && !empty($_FILES['txtImagemRestaurante']) ) {	
+				$diretorioArquivo 	= $_SERVER['DOCUMENT_ROOT']."/sirp/web-files/imagens/restaurantes/{$_SESSION['restaurante']}";
+
+				//Criando Pasta dos eventos do restaurante
+				if (!is_dir($diretorioArquivo)) {
+		            umask(0777);
+		            mkdir($diretorioArquivo);
+		            chmod($diretorioArquivo, 0777);
+		        }
+		        $diretorioArquivo .= "/imagens";
+		        if (!is_dir($diretorioArquivo)) {
+		            umask(0777);
+		            mkdir($diretorioArquivo);
+		            chmod($diretorioArquivo, 0777);
+		        }
+		        //--------------------------------------------------------
+		        $arrayImagens = null;
+				for($i = 0; $i < count($_FILES['txtImagemRestaurante']); $i++) {
+					if( !empty($_FILES['txtImagemRestaurante']['name'][$i]) ) {
+						$arrayImagens[$i]['name'] 		= $_FILES['txtImagemRestaurante']['name'][$i];
+						$arrayImagens[$i]['type'] 		= $_FILES['txtImagemRestaurante']['type'][$i];
+						$arrayImagens[$i]['tmp_name'] 	= $_FILES['txtImagemRestaurante']['tmp_name'][$i];
+						$arrayImagens[$i]['error'] 		= $_FILES['txtImagemRestaurante']['error'][$i];
+						$arrayImagens[$i]['size'] 		= $_FILES['txtImagemRestaurante']['size'][$i];
+
+						$arquivo 		= $arrayImagens[$i];
+						$retornoUpload 	= uploadArquivo($arquivo, $diretorioArquivo);
+						if( !empty($retornoUpload) ) {
+							$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-warning alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>{$retornoUpload}</div>";
+							$erros++;
+							break;
+						}
+					}	
+				}								
+			}
+
+		/*	var_dump($erros, $arrayRestauranteBD);
+			exit;*/
+			if( $erros == 0 ) {					
+				$result = $this->mRest->cadastrarRestaurante($arrayRestauranteBD);
+			}			
+		}
+
+		if( isset($enderecoRest, $bairroRest, $cidadeRest, $cboEstadoRest) && !empty($enderecoRest) && !empty($bairroRest) && !empty($cidadeRest) && !empty($cboEstadoRest) ) {
+			$listaRestaurante = $this->mRest->listaRestaurante($_SESSION['restaurante']);
+			if( !empty($listaRestaurante) ) {
+				foreach ($listaRestaurante as $restaurante) {
+					if( !empty($restaurante['cnpj']) && !empty($restaurante['nomeRestaurante']) && !empty($restaurante['telefone1']) && !empty($restaurante['horarioFuncionamentoInicial']) && !empty($restaurante['horarioFuncionamentoFinal']) ) {
+						$arrayRestauranteBD['nomeRestaurante'] 				= $restaurante['nomeRestaurante'];
+						$arrayRestauranteBD['horarioFuncionamentoInicial'] 	= $restaurante['horarioFuncionamentoInicial'];
+						$arrayRestauranteBD['horarioFuncionamentoFinal'] 	= $restaurante['horarioFuncionamentoFinal'];
+						$arrayRestauranteBD['logradouro'] 					= $enderecoRest;
+						$arrayRestauranteBD['complemento'] 					= $complementoRest;
+						$arrayRestauranteBD['bairro'] 						= $bairroRest;
+						$arrayRestauranteBD['cidade'] 						= $cidadeRest;
+						$arrayRestauranteBD['cep'] 							= retiraCaracteres($cepRest);
+						$arrayRestauranteBD['uf'] 							= $cboEstadoRest;
+						$result = $this->mRest->cadastrarRestaurante($arrayRestauranteBD);
+						
+					} else {
+						$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-warning alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Não foi possível cadastrar Restaurante. Por favor cadastre os dados do restaurante primeiro.</div>";
+					}
+				}				
+			}
+		}
+
+		if( $result == FALSE  && !isset($arrayDadosTela['exibeMensagem']) ) {
+			$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-warning alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Não foi possível cadastrar Restaurante.</div>";
+		} else {
+			$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-sucess alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Restaurante cadastrado com sucesso!</div>";
+		}
+
+		$this->load->view("header");
+		$this->exibeMenu();
+		$this->load->view("administracao/admin/infoRestaurante", $arrayDadosTela);
+		$this->load->view("footer");
 	}
 
 	public function cadastrarMesa()
@@ -130,7 +210,7 @@ class AdminController extends CI_Controller
 			if( !isset($arrayDadosTela['exibeMensagem']) ) {
 				$arrayEventoBD 						= null;
 				$arrayEventoBD['nomeEvento'] 		= $txtEvento;
-				$arrayEventoBD['descricaoEvento'] 	= ( isset($txtDescricao) && !empty($txtDescricao) ? $txtDescricao : null );
+				$arrayEventoBD['descricaoEvento'] 	= ( isset($txtDescricao) && !empty($txtDescricao) ? auto_typography($txtDescricao) : null );
 				$arrayEventoBD['dataHora'] 			= formataDataBanco($txtDataHora, 'S');
 				$arrayEventoBD['linkEvento'] 		= ( isset($txtLinkEvento) && !empty($txtLinkEvento) ? $txtLinkEvento : null );
 				$arrayEventoBD['imagemEvento'] 		= ( isset($arquivo['name']) && !empty($arquivo['name']) ? $arquivo['name'] : null );
@@ -167,7 +247,7 @@ class AdminController extends CI_Controller
 				foreach ($listaEventos as $evento) {
 					$retorno[$count]['id_evento'] 		= $evento['id_evento'];
 					$retorno[$count]['nomeEvento'] 		= $evento['nomeEvento'];
-					$retorno[$count]['descricaoEvento']	= $evento['descricaoEvento'];				
+					$retorno[$count]['descricaoEvento']	= auto_typography($evento['descricaoEvento']);				
 					$retorno[$count]['dataHora'] 		= formataDataExibir($evento['dataHora']);
 					$retorno[$count]['linkEvento'] 		= $evento['linkEvento'];
 					$retorno[$count]['imagemEvento'] 	= $evento['imagemEvento'];
@@ -195,6 +275,51 @@ class AdminController extends CI_Controller
 				$retorno[$count]['num_mesa'] 		= $evento['num_mesa'];
 				$retorno[$count]['qtdLugaresMesa']	= $evento['qtdLugaresMesa'];				
 				$retorno[$count]['taxaMesa'] 		= formataValorExibir($evento['taxaMesa']);				
+				$count++;
+			}
+		}
+		
+
+		echo json_encode($retorno);
+		exit;
+	}
+
+	public function pesquisarInfoRestaurante()
+	{
+		$retorno = null;		
+		$this->load->model("admin/Restaurante_model", "mRest");
+		extract($_POST);
+
+		if(! isset($_SESSION) ) {
+			session_start();
+		}
+
+		if(! isset($_SESSION['restaurante']) ) {
+			session_destroy();
+			alertMessage("Erro ao tentar acessar a página.\nPor favor faça o login novamente!", base_url());
+			exit;
+		}
+
+		$count 				= 0;
+		$listaRestaurante 	= $this->mRest->listaRestaurante($_SESSION['restaurante']);
+		if( !empty($listaRestaurante) ) {
+			foreach ($listaRestaurante as $restaurante) {
+				$retorno[$count]['id_restaurante'] 				= $restaurante['id_restaurante'];
+				$retorno[$count]['nomeRestaurante'] 			= $restaurante['nomeRestaurante'];
+				$retorno[$count]['nomeFantasia'] 				= $restaurante['nomeFantasia'];
+				$retorno[$count]['descricaoRestaurante'] 		= auto_typography($restaurante['descricaoRestaurante']);
+				$retorno[$count]['cnpj'] 						= $restaurante['cnpj'];
+				$retorno[$count]['logradouro'] 					= $restaurante['logradouro'];
+				$retorno[$count]['complemento'] 				= $restaurante['complemento'];
+				$retorno[$count]['bairro'] 						= $restaurante['bairro'];
+				$retorno[$count]['cidade'] 						= $restaurante['cidade'];
+				$retorno[$count]['cep'] 						= $restaurante['cep'];
+				$retorno[$count]['uf'] 							= $restaurante['uf'];
+				$retorno[$count]['telefone1'] 					= $restaurante['telefone1'];
+				$retorno[$count]['telefone2'] 					= $restaurante['telefone2'];
+				$retorno[$count]['horarioFuncionamentoInicial'] = formataDataExibir($restaurante['horarioFuncionamentoInicial'], 'S');
+				$retorno[$count]['horarioFuncionamentoFinal'] 	= formataDataExibir($restaurante['horarioFuncionamentoFinal'], 'S');				
+						
 				$count++;
 			}
 		}
