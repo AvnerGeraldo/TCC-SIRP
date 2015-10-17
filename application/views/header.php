@@ -7,5 +7,6 @@
 	<link rel="stylesheet" href="<?=base_url('web-files/lib/font-awesome/css/font-awesome.min.css')?>">
 	<script type="text/javascript" src="<?=base_url('web-files/js/jquery.min.js')?>"></script>
 	<script type="text/javascript" src="<?=base_url('web-files/lib/bootstrap/dist/js/bootstrap.js')?>"></script>
+	<script type="text/javascript" src="<?=base_url('web-files/lib/mask-plugin/dist/jquery.mask.min.js')?>"></script>
 </head>
 <body>

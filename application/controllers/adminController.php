@@ -11,6 +11,11 @@ class AdminController extends CI_Controller
 		$this->load->view("footer");
 	}
 
+	public function cadastrarEvento()
+	{
+		
+	}
+
 
 	//Pesquisas
 	public function pesquisarEventos()
@@ -21,16 +26,18 @@ class AdminController extends CI_Controller
 			extract($_POST);
 
 			$count 			= 0;
-			$listaEventos 	= $this->mEvento->listaEventos($nomeEvento, $dataHoraInicial, $dataHoraFinal);
-			foreach ($listaEventos as $evento) {
-				$retorno[$count]['id_evento'] 		= $evento['id_evento'];
-				$retorno[$count]['nomeEvento'] 		= $evento['nomeEvento'];
-				$retorno[$count]['descricaoEvento']	= $evento['descricaoEvento'];				
-				$retorno[$count]['dataHora'] 		= formataDataExibir($evento['dataHora']);
-				$retorno[$count]['linkEvento'] 		= $evento['linkEvento'];
-				$retorno[$count]['imagemEvento'] 	= $evento['imagemEvento'];
-				$retorno[$count]['id_restaurante'] 	= $evento['id_restaurante'];
-				$count++;
+			$listaEventos 	= $this->mEvento->listaEventos($nomeEvento, $dataHoraEvento, $dataHoraEventoFinal);
+			if( !empty($listaEventos) ) {
+				foreach ($listaEventos as $evento) {
+					$retorno[$count]['id_evento'] 		= $evento['id_evento'];
+					$retorno[$count]['nomeEvento'] 		= $evento['nomeEvento'];
+					$retorno[$count]['descricaoEvento']	= $evento['descricaoEvento'];				
+					$retorno[$count]['dataHora'] 		= formataDataExibir($evento['dataHora']);
+					$retorno[$count]['linkEvento'] 		= $evento['linkEvento'];
+					$retorno[$count]['imagemEvento'] 	= $evento['imagemEvento'];
+					$retorno[$count]['id_restaurante'] 	= $evento['id_restaurante'];
+					$count++;
+				}
 			}
 		}
 

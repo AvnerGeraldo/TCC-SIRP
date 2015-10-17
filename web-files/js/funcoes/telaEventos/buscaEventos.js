@@ -4,6 +4,9 @@ $(document).ready(function() {
 	limparFormulario();
 	limpaPeriodo();
 
+	$("#txtDataHora").mask("00/00/0000 00:00:00");
+	$("#txtDataHoraFinal").mask("00/00/0000 00:00:00");
+
 	$("a.btnAddBuscaPeriodo").click(function () {
 		if( display == true ) {
 			display = false;
@@ -19,13 +22,20 @@ $(document).ready(function() {
 	});
 
 	$("button[name='btnPesquisar']").click( function() {
+		erro 				= 0;
 		nomeEvento 			= $("#txtEvento").val();
 		dataHoraEvento 		= $("#txtDataHora").val();
 		dataHoraEventoFinal = $("#txtDataHoraFinal").val();
 
-		if( nomeEvento == "" || dataHoraEvento == "" || dataHoraEvento != "" && dataHoraEventoFinal == "") {
-			$(".error-message").show();
-			$(".error-message span").html('Por favor preencha os campos corretamente!');
+		if( nomeEvento == "" && dataHoraEvento == "" ) {
+			erro += 1;			
+		} else if( dataHoraEvento != "" && dataHoraEventoFinal == "") {
+			erro += 1;
+		}
+
+		if( erro > 0 ) {
+			$(".error-message").remove();
+			$("form[name=\"frmEvento\"]").before("<div class=\"alert alert-warning alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Por favor preencha os campos corretamente!</div>");
 			return false;
 		}
 
@@ -39,10 +49,14 @@ $(document).ready(function() {
 				retornoPesquisa = $.parseJSON(retornoPesquisa);
 
 				if( retornoPesquisa == null || retornoPesquisa == "" ) {
+					$(".error-message").remove();
+			$("form[name=\"frmEvento\"]").before("<div class=\"alert alert-warning alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Dados não encontrados! Por favor faça uma nova pesquisa.</div>");
 					$("#tbListaEventos tbody").html('');
+					$("#tbListaEventos").hide();
 					return false;
 				}
 
+				$("#tbListaEventos").show();
 				$.each(retornoPesquisa, function(index, value) {
 					linha = "<tr>";
 					linha += "<td>" + value['nomeEvento'] + "</td>";
@@ -80,9 +94,8 @@ $(document).ready(function() {
 		$("#txtDescricao").val('');
 		$("#txtLinkEvento").val('');
 		$("#txtImagemEvento").val('');
-		$("#txtDataHora").val('');		
-		$(".error-message").hide();
-		$(".error-message span").html('');
+		$("#txtDataHora").val('');
+		$("#tbListaEventos").hide();
 	}
 
 	function limpaPeriodo()

@@ -1,11 +1,8 @@
 <link rel="stylesheet" href="<?=base_url('web-files/css/admin/estiloPageAdmin.css')?>">
 <div class="container-fluid well">
 	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
-		<div class="alert alert-warning alert-dismissible error-message" role="alert">
-		  	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>		  	
-		  	<span></span>
-		</div>
-		<form name="frmEvento" method="POST" enctype="multipart/form-data" class="form-horizontal">
+		
+		<form name="frmEvento" method="POST" action="<?=base_url('Eventos/cadastrar')?>" enctype="multipart/form-data" class="form-horizontal">
 			<div class="form-group">
 				<label for="txtEvento" class="col-lg-2 col-md-2 col-sm-2 col-xs-4">Evento:</label>
 				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
@@ -20,13 +17,13 @@
 			</div>
 			<div class="form-group">
 				<label for="txtDataHora" class="col-lg-2 col-md-2 col-sm-2 col-xs-4">Data e Hora:</label>
-				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
 					<input type="text" name="txtDataHora" id="txtDataHora" class="form-control" required>
 				</div>
 				<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
 					<span class="texto-periodo">a</span>
 				</div>
-				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
 					<input type="text" name="txtDataHoraFinal" id="txtDataHoraFinal" class="form-control">
 				</div>
 				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
