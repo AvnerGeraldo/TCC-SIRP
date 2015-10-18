@@ -50,15 +50,11 @@ class AdminController extends CI_Controller
 
 				//Criando Pasta dos eventos do restaurante
 				if (!is_dir($diretorioArquivo)) {
-		            umask(0777);
 		            mkdir($diretorioArquivo);
-		            chmod($diretorioArquivo, 0777);
 		        }
 		        $diretorioArquivo .= "/imagens";
 		        if (!is_dir($diretorioArquivo)) {
-		            umask(0777);
 		            mkdir($diretorioArquivo);
-		            chmod($diretorioArquivo, 0777);
 		        }
 		        //--------------------------------------------------------
 		        $arrayImagens = null;
@@ -88,7 +84,7 @@ class AdminController extends CI_Controller
 			}			
 		}
 
-		if( isset($enderecoRest, $bairroRest, $cidadeRest, $cboEstadoRest) && !empty($enderecoRest) && !empty($bairroRest) && !empty($cidadeRest) && !empty($cboEstadoRest) ) {
+		if( isset($txtLogradouro, $txtBairro, $txtCidade, $cboEstado) && !empty($txtLogradouro) && !empty($txtBairro) && !empty($txtCidade) && !empty($cboEstado) ) {
 			$listaRestaurante = $this->mRest->listaRestaurante($_SESSION['restaurante']);
 			if( !empty($listaRestaurante) ) {
 				foreach ($listaRestaurante as $restaurante) {
@@ -96,12 +92,12 @@ class AdminController extends CI_Controller
 						$arrayRestauranteBD['nomeRestaurante'] 				= $restaurante['nomeRestaurante'];
 						$arrayRestauranteBD['horarioFuncionamentoInicial'] 	= $restaurante['horarioFuncionamentoInicial'];
 						$arrayRestauranteBD['horarioFuncionamentoFinal'] 	= $restaurante['horarioFuncionamentoFinal'];
-						$arrayRestauranteBD['logradouro'] 					= $enderecoRest;
-						$arrayRestauranteBD['complemento'] 					= $complementoRest;
-						$arrayRestauranteBD['bairro'] 						= $bairroRest;
-						$arrayRestauranteBD['cidade'] 						= $cidadeRest;
-						$arrayRestauranteBD['cep'] 							= retiraCaracteres($cepRest);
-						$arrayRestauranteBD['uf'] 							= $cboEstadoRest;
+						$arrayRestauranteBD['logradouro'] 					= $txtLogradouro;
+						$arrayRestauranteBD['complemento'] 					= ( isset($txtComplemento) && !empty($txtComplemento) ? $txtComplemento : '' );
+						$arrayRestauranteBD['bairro'] 						= $txtBairro;
+						$arrayRestauranteBD['cidade'] 						= $txtCidade;
+						$arrayRestauranteBD['cep'] 							= $txtCep;
+						$arrayRestauranteBD['uf'] 							= $cboEstado;
 						$result = $this->mRest->cadastrarRestaurante($arrayRestauranteBD);
 						
 					} else {
@@ -114,7 +110,7 @@ class AdminController extends CI_Controller
 		if( $result == FALSE  && !isset($arrayDadosTela['exibeMensagem']) ) {
 			$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-warning alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Não foi possível cadastrar Restaurante.</div>";
 		} else {
-			$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-sucess alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Restaurante cadastrado com sucesso!</div>";
+			$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-success alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Restaurante cadastrado com sucesso!</div>";
 		}
 
 		$this->load->view("header");

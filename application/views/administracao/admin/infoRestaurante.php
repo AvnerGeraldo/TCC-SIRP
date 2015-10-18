@@ -19,6 +19,7 @@
             </div>
             <div class="panel-body">
                 <div class="tab-content">                    
+                    <?=( isset($exibeMensagem) ? $exibeMensagem : '')?>
                     <div class="tab-pane fade in active" id="tabInfoRestaurante">
                         <form name="frmRestauranteInfo" method="POST" action="<?=base_url('Restaurante/cadastrar')?>" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group">
