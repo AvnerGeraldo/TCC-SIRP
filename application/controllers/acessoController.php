@@ -26,6 +26,8 @@ class AcessoController extends CI_Controller
 			session_start();
 		}
 
+
+
 		$this->load->view('header');
 		if( isset($_POST['txtLogin'], $_POST['txtSenha']) || isset($_SESSION['loginSIRP']) && !empty($_SESSION['loginSIRP']) ) {
 
@@ -42,7 +44,7 @@ class AcessoController extends CI_Controller
 				$arrayDadosTela = null;
 				//------------------------------------------
 				if( !isset($_SESSION['loginSIRP']) ) {		
-					$listaFunc = $this->mFunc->listaFuncionario($txtLogin);
+					$listaFunc = $this->mFunc->buscarFuncionarioLogin($txtLogin);
 					if( !empty($listaFunc) ) {						
 						foreach ($listaFunc as $func) {
 							$_SESSION['loginSIRP']		= $func['login'];
@@ -102,7 +104,7 @@ class AcessoController extends CI_Controller
 
 		if(! isset($_SESSION['restaurante']) ) {
 			session_destroy();
-			alertMessage("Erro ao tentar acessar a página.\nPor favor faça o login novamente!", base_url());
+			alertMessage("Erro ao tentar acessar a página.Por favor faça o login novamente!", base_url());
 			exit;
 		}
 

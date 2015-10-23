@@ -62,4 +62,4 @@
 		</table>
 	</div>
 </div>
-<script type="text/javascript" src="<?=base_url('web-files/js/funcoes/telaEventos/buscaEventos.js')?>"></script>
+<script type="text/javascript" src="<?=base_url('web-files/js/funcoes/telaEventos/buscarEventos.js')?>"></script>

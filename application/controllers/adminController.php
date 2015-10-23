@@ -5,6 +5,7 @@ class AdminController extends CI_Controller
 
 	public function restaurante()
 	{
+
 		$this->load->view("header");
 		$this->exibeMenu();
 		$this->load->view("administracao/admin/infoRestaurante");
@@ -29,7 +30,7 @@ class AdminController extends CI_Controller
 
 		if(! isset($_SESSION['restaurante']) ) {
 			session_destroy();
-			alertMessage("Erro ao tentar acessar a página.\nPor favor faça o login novamente!", base_url());
+			alertMessage("Erro ao tentar acessar a página.Por favor faça o login novamente!", base_url());
 			exit;
 		}
 		//---------------------------------------------------------------------------------------------------			
@@ -133,7 +134,7 @@ class AdminController extends CI_Controller
 
 			if(! isset($_SESSION['restaurante']) ) {
 				session_destroy();
-				alertMessage("Erro ao tentar acessar a página.\nPor favor faça o login novamente!", base_url());
+				alertMessage("Erro ao tentar acessar a página.Por favor faça o login novamente!", base_url());
 				exit;
 			}
 			//---------------------------------------------------------------------------------------------------
@@ -168,7 +169,7 @@ class AdminController extends CI_Controller
 
 		if(! isset($_SESSION['restaurante']) ) {
 			session_destroy();
-			alertMessage("Erro ao tentar acessar a página.\nPor favor faça o login novamente!", base_url());
+			alertMessage("Erro ao tentar acessar a página.Por favor faça o login novamente!", base_url());
 			exit;
 		}
 
@@ -225,6 +226,73 @@ class AdminController extends CI_Controller
 		$this->load->view("administracao/admin/eventos", $arrayDadosTela);
 		$this->load->view("footer");
 
+	}
+
+	public function funcionario()
+	{		
+		$this->load->view("header");
+		$this->exibeMenu();
+		$this->load->view("administracao/admin/funcionarios");
+		$this->load->view("footer");
+	}
+
+	public function cadastrarFuncionario()
+	{	
+		$arrayDadosTela = null;
+		if( isset($_POST['txtFuncionario'], $_POST['txtLogin'], $_POST['cboNivelAcesso']) && !empty($_POST['txtFuncionario']) && !empty($_POST['txtLogin']) && !empty($_POST['cboNivelAcesso']) ) {
+			$this->load->model("acesso/Funcionario_model", "mFunc");
+			extract($_POST);
+
+			if(! isset($_SESSION) ) {
+				session_start();
+			}
+
+			if(! isset($_SESSION['restaurante']) ) {
+				session_destroy();
+				alertMessage("Erro ao tentar acessar a página.Por favor faça o login novamente!", base_url());
+				exit;
+			}
+
+			$arrayFuncionario = null;
+			$arrayFuncionario['nome_funcionario'] 		=  strtoupper($txtFuncionario);
+			$arrayFuncionario['login'] 					=  strtolower($txtLogin);
+			
+			if( !empty($txtSenha) ) {
+				$arrayFuncionario['senha'] 					=  do_hash($txtSenha, "md5");
+			}
+
+			$arrayFuncionario['nivel_acesso'] 			=  $cboNivelAcesso;
+			$arrayFuncionario['id_restaurante'] 		=  $_SESSION['restaurante'];
+
+
+
+			$retornoCadastro = $this->mFunc->cadastrarFuncionario($arrayFuncionario) ;
+		
+			if( $retornoCadastro ) {
+				$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-success alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Funcionário cadastrado com sucesso!</div>";
+			} else {
+				$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-danger alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Erro ao cadastrar funcionário. Por favor verifique os dados.</div>";
+			}
+		}
+
+		$this->load->view("header");
+		$this->exibeMenu();
+		$this->load->view("administracao/admin/funcionarios", $arrayDadosTela);
+		$this->load->view("footer");
+ 	}
+
+	public function excluirFuncionario()
+	{
+		$result = false;
+		if( isset($_POST['id_funcionario']) && !empty($_POST['id_funcionario']) ) {
+			$this->load->model("acesso/Funcionario_model", "mFunc");
+			extract($_POST);
+
+			$result = $this->mFunc->excluirFuncionario($id_funcionario);
+		}
+
+		echo json_encode($result);
+		exit;
 	}
 
 	
@@ -292,7 +360,7 @@ class AdminController extends CI_Controller
 
 		if(! isset($_SESSION['restaurante']) ) {
 			session_destroy();
-			alertMessage("Erro ao tentar acessar a página.\nPor favor faça o login novamente!", base_url());
+			alertMessage("Erro ao tentar acessar a página.Por favor faça o login novamente!", base_url());
 			exit;
 		}
 
@@ -325,6 +393,22 @@ class AdminController extends CI_Controller
 		exit;
 	}
 
+	public function pesquisarFuncionario()
+	{
+		$result = null;
+		
+
+		if( isset($_POST['nomeFunc'], $_POST['loginFunc'], $_POST['senhaFunc'], $_POST['nivelFunc']) ) {
+			$this->load->model("acesso/Funcionario_model", "mFunc");
+			extract($_POST);
+
+			$result = $this->mFunc->buscarFuncionario($nomeFunc, $loginFunc, $nivelFunc);
+		}
+
+		echo json_encode($result);
+		exit;
+	}
+
 	//--------------------------------------------------------------------------------------------------------------
 
 
@@ -336,7 +420,7 @@ class AdminController extends CI_Controller
 
 		if(! isset($_SESSION['restaurante']) ) {
 			session_destroy();
-			alertMessage("Erro ao tentar acessar a página.\nPor favor faça o login novamente!", base_url());
+			alertMessage("Erro ao tentar acessar a página.Por favor faça o login novamente!", base_url());
 			exit;
 		}
 

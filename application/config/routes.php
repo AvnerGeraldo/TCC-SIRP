@@ -55,18 +55,26 @@ $route['Logoff'] 					= 'AcessoController/logoff';
 //Exibir páginas
 $route['Restaurante'] 				= 'AdminController/restaurante';
 $route['Eventos'] 					= 'AdminController/eventos';
+$route['Funcionarios'] 				= 'AdminController/funcionario';
 //---------------------------------------------------------------------------------
 
 //Cadastros
 $route['Restaurante/cadastrar'] 	= 'AdminController/cadastrarRestaurante';
 $route['Restaurante/cadastrarMesa'] = 'AdminController/cadastrarMesa';
 $route['Eventos/cadastrar'] 		= 'AdminController/cadastrarEvento';
+$route['Funcionario/cadastrar'] 	= 'AdminController/cadastrarFuncionario';
 //---------------------------------------------------------------------------------
+
+//Excluir
+$route['Funcionario/excluir'] 	= 'AdminController/excluirFuncionario';
+//---------------------------------------------------------------------------------
+
 
 //Pesquisas
 $route['Restaurante/pesquisarEventos'] 			= 'AdminController/pesquisarEventos';
 $route['Restaurante/pesquisarMesas'] 			= 'AdminController/pesquisarMesas';
 $route['Restaurante/pesquisarInfoRestaurante'] 	= 'AdminController/pesquisarInfoRestaurante';
+$route['Funcionarios/pesquisarFuncionario'] 	= 'AdminController/pesquisarFuncionario';
 //---------------------------------------------------------------------------------
 
 
