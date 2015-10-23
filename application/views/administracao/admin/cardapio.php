@@ -1,3 +1,8 @@
+<?php
+	if( isset($dadosCardapio) && !empty($dadosCardapio) ) {
+		extract($dadosCardapio);
+	}
+?>
 <link rel="stylesheet" href="<?=base_url('web-files/css/admin/estiloPageAdmin.css')?>">
 <link rel="stylesheet" href="<?=base_url('web-files/css/admin/estiloAutoComplete.css')?>">
 <div class="container-fluid well">
@@ -29,10 +34,10 @@
 				<label for="rbAtivo" class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Ativo:</label>
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					<label class="radio-inline">
-						<input type="radio" name="rbAtivo" value='S' <?=( isset($status) && ($status == 'S' ||  empty($status) ) || !isset($status)  ? 'checked' : '')?>>Sim
+						<input type="radio" name="rbAtivo" value='S' <?=( isset($statusCardapio) && ($statusCardapio == 'S' ||  empty($statusCardapio) ) || !isset($statusCardapio)  ? 'checked' : '')?>>Sim
 					</label>
 					<label class="radio-inline">
-						<input type="radio" name="rbAtivo" value='N' <?=( isset($status) && $status == 'N' ? 'checked' : '')?>>Não
+						<input type="radio" name="rbAtivo" value='N' <?=( isset($statusCardapio) && $statusCardapio == 'N' ? 'checked' : '')?>>Não
 					</label>
 				</div>
 
@@ -58,4 +63,5 @@
 		</table>
 	</div>
 </div>
+<script type="text/javascript" src="<?=base_url('web-files/js/funcoes/telaCardapio/buscarCardapio.js')?>"></script>
 <script type="text/javascript" src="<?=base_url('web-files/js/funcoes/telaCardapio/buscarProdutosCardapio.js')?>"></script>

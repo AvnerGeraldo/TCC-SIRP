@@ -471,13 +471,13 @@ class AdminController extends CI_Controller
 					$arrayDadosTela['exibeMensagem'] 	= "<div class=\"alert alert-success alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Cardápio cadastrado com sucesso!</div>";
 					$arrayDadosTela['dadosCardapio'] 	= $arrayCardapio;
 					if( isset($nomeImagem) && !empty($nomeImagem) ) {						
-						$arrayDadosTela['dadosCardapio']['imagemCardapio'] = base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/produtos/{$nomeImagem}");
+						$arrayDadosTela['dadosCardapio']['imagemCardapio'] = base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/cardapio/{$nomeImagem}");
 					} else {
 						$listaProduto = $this->mCardapio->buscarCardapio($arrayCardapio['nomeCardapio']);						
 						if( !empty($listaProduto) ) {
 							foreach ($listaProduto as $dadosCardapio) {
 								if( !empty($dadosCardapio['imagemCardapio']) ) {
-									$arrayDadosTela['dadosCardapio']['imagemCardapio'] = base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/produtos/{$dadosProduto['imagemCardapio']}");
+									$arrayDadosTela['dadosCardapio']['imagemCardapio'] = base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/cardapio/{$dadosCardapio['imagemCardapio']}");
 								}
 							}
 						}
@@ -677,8 +677,8 @@ class AdminController extends CI_Controller
 				$count = 0;
 				foreach ($listaCardapios as $cardapio) {
 					$result[$count]['label'] 		= $cardapio['nomeCardapio'];
-					$result[$count]['imagem'] 		= base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/produtos/{$produto['imagemCardapio']}");										
-					$result[$count]['ativo'] 		= ( $cardapio['status'] == 'S' ? TRUE : FALSE );
+					$result[$count]['imagem'] 		= base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/cardapio/{$cardapio['imagemCardapio']}");										
+					$result[$count]['ativo'] 		= ( $cardapio['statusCardapio'] == 'S' ? TRUE : FALSE );
 					$count++;
 				}
 			}
