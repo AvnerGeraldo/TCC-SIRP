@@ -403,6 +403,20 @@ class AdminController extends CI_Controller
 		$this->load->view("footer");
 	}
 
+	public function excluirProduto()
+	{
+		$result = false;
+		if( isset($_POST['id_produto']) && !empty($_POST['id_produto']) ) {
+			$this->load->model("admin/Produto_model", "mProduto");
+			extract($_POST);
+
+			$result = $this->mProduto->excluirProduto($id_produto);
+		}
+
+		echo  json_encode($result);
+		exit;
+	}
+
 
 	public function cardapio()
 	{
@@ -636,9 +650,10 @@ class AdminController extends CI_Controller
 			if( !empty($listaProdutos) ) {
 				$count = 0;
 				foreach ($listaProdutos as $produto) {
+					$result[$count]['idProduto'] 	= $produto['id_produto'];
 					$result[$count]['label'] 		= $produto['nomeProduto'];
 					$result[$count]['categoria'] 	= $produto['id_categoriaProduto'];
-					$result[$count]['imagem'] 		= base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/produtos/{$produto['imagem']}");					
+					$result[$count]['imagem'] 		= ( isset($produto['imagem']) && !empty($produto['imagem']) ? base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/produtos/{$produto['imagem']}") : '' );					
 					$result[$count]['descricao'] 	= $produto['descricaoProduto'];
 					$result[$count]['preco'] 		= formataValorExibir($produto['valor']);
 					$result[$count]['ativo'] 		= ( $produto['status'] == 'S' ? TRUE : FALSE );
@@ -682,6 +697,20 @@ class AdminController extends CI_Controller
 					$count++;
 				}
 			}
+		}
+
+		echo json_encode($result);
+		exit;
+	}
+
+	public function pesquisarCategoria()
+	{
+		$result = null;
+		if( isset($_POST['id_categoria']) && !empty($_POST['id_categoria']) ) {
+			$this->load->model("admin/Categoria_model", "mCat");
+			extract($_POST);
+
+			$result = $this->mCat->listaCategorias($id_categoria);
 		}
 
 		echo json_encode($result);

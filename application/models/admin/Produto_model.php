@@ -46,5 +46,15 @@ class Produto_model extends CI_Model
 			$result = $this->_db->insert("produto", $arrayProduto);
 		}
 		return $result;
-	}	
+	}
+
+	public function excluirProduto($id_produto)
+	{
+		if( !empty($id_produto) ) {			
+			$this->_db>where("id_produto", $id_produto);
+			return $this->_db->delete("produto");
+		}
+
+		return false;
+	}
 }

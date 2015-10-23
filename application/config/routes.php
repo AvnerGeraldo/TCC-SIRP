@@ -70,7 +70,8 @@ $route['Cardapio/cadastrar'] 		= 'AdminController/cadastrarCardapio';
 //---------------------------------------------------------------------------------
 
 //Excluir
-$route['Funcionario/excluir'] 	= 'AdminController/excluirFuncionario';
+$route['Funcionario/excluir'] 		= 'AdminController/excluirFuncionario';
+$route['Produto/removeProduto'] 	= 'AdminController/excluirProduto';
 //---------------------------------------------------------------------------------
 
 
@@ -81,6 +82,7 @@ $route['Restaurante/pesquisarInfoRestaurante'] 	= 'AdminController/pesquisarInfo
 $route['Funcionarios/pesquisarFuncionario'] 	= 'AdminController/pesquisarFuncionario';
 $route['Produtos/pesquisarArrayProdutos'] 		= 'AdminController/pesquisarArrayProdutos';
 $route['Cardapio/pesquisarArrayCardapio'] 		= 'AdminController/pesquisarArrayCardapio';
+$route['Categoria/pesquisarCategoria'] 			= 'AdminController/pesquisarCategoria';
 
 //---------------------------------------------------------------------------------
 //Stuffs

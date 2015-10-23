@@ -91,6 +91,25 @@ class Funcionario_model extends CI_Model
 		return $result;
 	}
 
+	public function excluirFuncionario($id_funcionario)
+	{
+		$result = false;
+		if(! isset($_SESSION) ) {
+			session_start();
+		}
+
+		if(! isset($_SESSION['restaurante']) ) {
+			return $result;
+		}
+		if( !empty($id_funcionario) ) {
+			$this->_db>where("id_restaurante", $_SESSION['restaurante']);
+			$this->_db>where("id_funcionario", $id_funcionario);
+			return $this->_db->delete("functionario");
+		}
+
+		return $result;
+	}
+
 	public function logarUsuarioRestaurante($usuario, $senha)
 	{
 		$result 	= FALSE;
