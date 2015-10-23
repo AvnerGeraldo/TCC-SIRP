@@ -403,6 +403,100 @@ class AdminController extends CI_Controller
 		$this->load->view("footer");
 	}
 
+
+	public function cardapio()
+	{
+	
+		$this->load->view("header");
+		$this->exibeMenu();
+		$this->load->view("administracao/admin/cardapio");
+		$this->load->view("footer");
+	}
+
+	public function cadastrarCardapio()
+	{	
+
+		$arrayDadosTela = null;
+
+		if( isset($_POST['txtCardapio'], $_POST['rbAtivo']) && !empty($_POST['txtCardapio']) && !empty($_POST['rbAtivo']) ) {
+			$this->load->model("admin/Cardapio_model", "mCardapio");
+			extract($_POST);
+
+
+			//Verificar acesso do restaurante
+			if(! isset($_SESSION) ) {
+				session_start();
+			}
+
+			if(! isset($_SESSION['restaurante']) ) {
+				session_destroy();
+				alertMessage("Erro ao tentar acessar a página.Por favor faça o login novamente!", base_url());
+				exit;
+			}
+			//---------------------------------------------------------------------------------------------------	
+
+			if( isset($_FILES['txtImagem']['name']) && !empty($_FILES['txtImagem']['name']) ) {
+				//Pasta de destino
+				$diretorioArquivo 	= $_SERVER['DOCUMENT_ROOT']."/sirp/web-files/imagens/restaurantes/{$_SESSION['restaurante']}/";
+				if (!is_dir($diretorioArquivo)) {		            
+		            mkdir($diretorioArquivo);            
+		        }
+
+		        $diretorioArquivo     .= "cardapio/";
+		        if (!is_dir($diretorioArquivo)) {
+		            mkdir($diretorioArquivo);            
+		        }        
+		        //---------------------------------------------------------------------------------------------------------------------------------------------
+		        		        
+				$retornoUpload 	= uploadArquivo($_FILES['txtImagem'], $diretorioArquivo);
+				if( !empty($retornoUpload) ) {
+					$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-warning alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>{$retornoUpload}</div>";					
+				} else {
+					$nomeImagem = $_FILES['txtImagem']['name'];
+				}
+			}
+
+			if( !isset($_FILES['txtImagem']) || empty($retornoUpload) ) {
+				$arrayCardapio 							= null;
+				$arrayCardapio['nomeCardapio'] 			= $txtCardapio;				
+				$arrayCardapio['statusCardapio'] 		= $rbAtivo;
+				$arrayCardapio['id_restaurante'] 		= $_SESSION['restaurante'];
+
+				if( isset($nomeImagem) && !empty($nomeImagem) ) {
+					$arrayCardapio['imagemCardapio'] 				= $nomeImagem;
+				}			
+
+				$retornoCadastro = $this->mCardapio->cadastrarCardapio($arrayCardapio);
+				if( $retornoCadastro ) {
+					$arrayDadosTela['exibeMensagem'] 	= "<div class=\"alert alert-success alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Cardápio cadastrado com sucesso!</div>";
+					$arrayDadosTela['dadosCardapio'] 	= $arrayCardapio;
+					if( isset($nomeImagem) && !empty($nomeImagem) ) {						
+						$arrayDadosTela['dadosCardapio']['imagemCardapio'] = base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/produtos/{$nomeImagem}");
+					} else {
+						$listaProduto = $this->mCardapio->buscarCardapio($arrayCardapio['nomeCardapio']);						
+						if( !empty($listaProduto) ) {
+							foreach ($listaProduto as $dadosCardapio) {
+								if( !empty($dadosCardapio['imagemCardapio']) ) {
+									$arrayDadosTela['dadosCardapio']['imagemCardapio'] = base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/produtos/{$dadosProduto['imagemCardapio']}");
+								}
+							}
+						}
+					}
+				} else {
+					$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-danger alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Erro ao cadastrar cardápio. Por favor verifique os dados inseridos!</div>";
+				}
+			}
+
+		} else {
+			$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-warning alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Preencha os campos corretamente!</div>";
+		}
+
+		$this->load->view("header");
+		$this->exibeMenu();
+		$this->load->view("administracao/admin/cardapio", $arrayDadosTela);
+		$this->load->view("footer");
+	}
+
 	
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//Pesquisas
@@ -548,6 +642,43 @@ class AdminController extends CI_Controller
 					$result[$count]['descricao'] 	= $produto['descricaoProduto'];
 					$result[$count]['preco'] 		= formataValorExibir($produto['valor']);
 					$result[$count]['ativo'] 		= ( $produto['status'] == 'S' ? TRUE : FALSE );
+					$count++;
+				}
+			}
+		}
+
+		echo json_encode($result);
+		exit;
+	}
+
+	public function pesquisarArrayCardapio()
+	{
+		$result = null;
+		
+
+		if( isset($_POST['nomeCardapio']) && !empty($_POST['nomeCardapio']) ) {
+			$this->load->model("admin/Cardapio_model", "mCardapio");
+			extract($_POST);
+
+			if(! isset($_SESSION) ) {
+				session_start();
+			}
+
+			if(! isset($_SESSION['restaurante']) ) {
+				session_destroy();
+
+				$result = null;
+				echo json_encode($result);
+				exit;
+			}
+
+			$listaCardapios = $this->mCardapio->buscarCardapio($nomeCardapio);
+			if( !empty($listaCardapios) ) {
+				$count = 0;
+				foreach ($listaCardapios as $cardapio) {
+					$result[$count]['label'] 		= $cardapio['nomeCardapio'];
+					$result[$count]['imagem'] 		= base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/produtos/{$produto['imagemCardapio']}");										
+					$result[$count]['ativo'] 		= ( $cardapio['status'] == 'S' ? TRUE : FALSE );
 					$count++;
 				}
 			}

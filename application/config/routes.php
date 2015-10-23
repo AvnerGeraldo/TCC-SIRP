@@ -57,6 +57,7 @@ $route['Restaurante'] 				= 'AdminController/restaurante';
 $route['Eventos'] 					= 'AdminController/eventos';
 $route['Funcionarios'] 				= 'AdminController/funcionario';
 $route['Produtos'] 					= 'AdminController/produto';
+$route['Cardapio'] 					= 'AdminController/cardapio';
 //---------------------------------------------------------------------------------
 
 //Cadastros
