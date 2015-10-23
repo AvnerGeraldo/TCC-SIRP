@@ -295,8 +295,18 @@ class AdminController extends CI_Controller
 		exit;
 	}
 
-	
 
+	public function produto()
+	{
+
+		$this->load->view("header");
+		$this->exibeMenu();
+		$this->load->view("administracao/admin/produtos");
+		$this->load->view("footer");
+	}
+
+	
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//Pesquisas
 	public function pesquisarEventos()
 	{

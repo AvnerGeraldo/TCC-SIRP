@@ -56,6 +56,7 @@ $route['Logoff'] 					= 'AcessoController/logoff';
 $route['Restaurante'] 				= 'AdminController/restaurante';
 $route['Eventos'] 					= 'AdminController/eventos';
 $route['Funcionarios'] 				= 'AdminController/funcionario';
+$route['Produtos'] 					= 'AdminController/produto';
 //---------------------------------------------------------------------------------
 
 //Cadastros
@@ -76,8 +77,9 @@ $route['Restaurante/pesquisarMesas'] 			= 'AdminController/pesquisarMesas';
 $route['Restaurante/pesquisarInfoRestaurante'] 	= 'AdminController/pesquisarInfoRestaurante';
 $route['Funcionarios/pesquisarFuncionario'] 	= 'AdminController/pesquisarFuncionario';
 //---------------------------------------------------------------------------------
-
-
+//Stuffs
+$route['UploadImagem'] 	= 'AdminController/UploadImagem';
+//---------------------------------------------------------------------------------
 
 $route['404_override'] 			= '';
 $route['translate_uri_dashes'] 	= FALSE;
