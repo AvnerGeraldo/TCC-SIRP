@@ -11,7 +11,7 @@
 	<div class="menu-list">
 		<ul id="menu-content" class="menu-content collapse out">
 			<li>
-				<a href="#">
+				<a href="<?=base_url('Reservas')?>">
 					<i class="fa fa-calendar-check-o fa-lg"></i> Visualizar Reservas
 				</a>
 			</li>

@@ -3,6 +3,14 @@
 class AdminController extends CI_Controller 
 {
 
+	public function visualizaReserva()
+	{
+		$this->load->view("header");
+		$this->exibeMenu();
+		$this->load->view("administracao/admin/visualizaReserva");
+		$this->load->view("footer");
+	}
+
 	public function restaurante()
 	{
 
@@ -715,6 +723,25 @@ class AdminController extends CI_Controller
 
 		echo json_encode($result);
 		exit;
+	}
+
+	public function pesquisarReservas()
+	{
+		if( isset($_POST['statusReserva'], $_POST['rodouScript'], $_POST['dataHora']) ) {
+			$this->load->model("admin/Reserva_model", "mReserva");
+			extract($_POST);
+
+			if( !$rodouScript ) {
+				$dataHora = null;
+			} else {
+				$dataHora = formataDataBanco($dataHora, 'S');
+			}
+
+			$listaReservas = $this->mReserva->buscarReserva($statusReserva, $dataHora);
+			if( !empty($listaReservas) ) {
+
+			}
+		}
 	}
 
 	//--------------------------------------------------------------------------------------------------------------
