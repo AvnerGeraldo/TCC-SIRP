@@ -299,9 +299,14 @@ class AdminController extends CI_Controller
 	public function produto()
 	{
 
+		$this->load->model("admin/Categoria_model", "mCategoria");
+
+		$arrayDadosTela = null;
+		$arrayDadosTela['listaCategorias'] = $this->mCategoria->listaCategorias();
+
 		$this->load->view("header");
 		$this->exibeMenu();
-		$this->load->view("administracao/admin/produtos");
+		$this->load->view("administracao/admin/produtos", $arrayDadosTela);
 		$this->load->view("footer");
 	}
 
