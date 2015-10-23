@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="<?=base_url('web-files/css/admin/estiloPageAdmin.css')?>">
 <div class="container-fluid well">
 	<div class="col-lg-8 col-md-8 col-sm-9 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">		
+		<?=( isset($exibeMensagem) ? $exibeMensagem : '' )?>
 		<form name="frmProduto"  action="<?=base_url('Produtos/cadastrar')?>" method="post" enctype="multipart/form-data" class="form-horizontal">
 
 			<div class="form-group">
@@ -51,7 +52,7 @@
 				<label for="rbAtivo" class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Ativo:</label>
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					<label class="radio-inline">
-						<input type="radio" name="rbAtivo">Sim
+						<input type="radio" name="rbAtivo" checked>Sim
 					</label>
 					<label class="radio-inline">
 						<input type="radio" name="rbAtivo">Não

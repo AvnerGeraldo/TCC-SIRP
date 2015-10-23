@@ -305,6 +305,77 @@ class AdminController extends CI_Controller
 		$this->load->view("footer");
 	}
 
+	public function cadastrarProduto()
+	{
+		if( isset($_POST['cboCategoria'], $_POST['txtProduto'], $_POST['txtPreco'], $_POST['rbAtivo']) &&
+			!empty($_POST['cboCategoria']) && !empty($_POST['txtProduto']) && !empty($_POST['txtPreco']) &&
+			!empty($_POST['rbAtivo']) ) {
+			$this->load->model("admin/Produto_model", "mProduto");
+			extract($_POST);
+
+
+			//Verificar acesso do restaurante
+			if(! isset($_SESSION) ) {
+				session_start();
+			}
+
+			if(! isset($_SESSION['restaurante']) ) {
+				session_destroy();
+				alertMessage("Erro ao tentar acessar a página.Por favor faça o login novamente!", base_url());
+				exit;
+			}
+			//---------------------------------------------------------------------------------------------------	
+
+			if( isset($_FILES['txtImagem']) && !empty($_FILES['txtImagem']) ) {
+				//Pasta de destino
+				$diretorioArquivo 	= $_SERVER['DOCUMENT_ROOT']."/sirp/web-files/imagens/restaurantes/{$_SESSION['restaurante']}/";
+				if (!is_dir($diretorioArquivo)) {
+		            umask(0777);
+		            mkdir($diretorioArquivo);            
+		        }
+
+		        $diretorioArquivo     .= "produtos/";
+		        if (!is_dir($diretorioArquivo)) {
+		            umask(0777);
+		            mkdir($diretorioArquivo);            
+		        }        
+		        //---------------------------------------------------------------------------------------------------------------------------------------------
+		        		        
+				$retornoUpload 	= uploadArquivo($arquivo, $diretorioArquivo);
+				if( !empty($retornoUpload) ) {
+					$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-warning alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>{$retornoUpload}</div>";
+					$erros++;
+					break;
+				} else {
+					$nomeImagem = $_FILES['txtImagem']['name'];
+				}
+			}
+
+			if( !isset($_FILES['txtImagem']) || empty($retornoUpload) ) {
+				$arrayProduto 							= null;
+				$arrayProduto['nomeProduto'] 			= $txtProduto;
+				$arrayProduto['descricaoProduto'] 		= auto_typography($txtDescricao);
+				$arrayProduto['valor'] 					= formataValorBanco($txtPreco);
+				$arrayProduto['status'] 				= $rbAtivo;
+				$arrayProduto['imagem'] 				= ( isset($nomeImagem) ? $nomeImagem : '' );
+				$arrayProduto['id_categoriaProduto'] 	= $cboCategoria;
+
+				$retornoCadastro = $this->mProduto->cadastrarProduto($arrayProduto);
+				if( $retornoCadastro ) {
+					$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-success alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Produto cadastrado com sucesso!</div>";
+				} else {
+					$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-danger alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Erro ao cadastrar produto. Por favor verifique os dados inseridos!</div>";
+				}
+			}
+
+		}
+
+		$this->load->view("header");
+		$this->exibeMenu();
+		$this->load->view("administracao/admin/produtos", $arrayDadosTela);
+		$this->load->view("footer");
+	}
+
 	
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//Pesquisas
