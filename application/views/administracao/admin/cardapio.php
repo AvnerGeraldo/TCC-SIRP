@@ -50,12 +50,7 @@
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<label for="txtProduto" class="col-lg-2 col-md-2 col-sm-2 col-xs-3">Produto:</label>
 				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-					<div class="input-group">
-						<input type="text" name="txtProduto" id="txtProduto" class="form-control">
-						<span class="input-group-btn">
-							<button id="btnAddProdutoTabela" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
-						</span>
-					</div>
+					<input type="text" name="txtProduto" id="txtProduto" class="form-control">			
 				</div>				
 			</div>
 		</form>

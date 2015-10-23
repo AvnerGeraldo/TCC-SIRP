@@ -10,72 +10,71 @@ $(document).ready(function() {
 					nomeProduto: $( this ).val()
 				}, function( retornoPesquisa ) {
 					retornoPesquisa = $.parseJSON(retornoPesquisa);
+					
+					$("#txtProduto").autocomplete({
+						minLength: 0, 
+						source: retornoPesquisa,
+						focus: function( event, ui ) {
+					    	$( this ).val( ui.item.label );
+					        return false;
+					     },
+					    select: function( event, ui ) {						        
 
-					if( retornoPesquisa != null ) {
-						$("#txtProduto").autocomplete({
-							minLength: 0, 
-							source: retornoPesquisa,
-							focus: function( event, ui ) {
-						    	$( this ).val( ui.item.label );
-						        return false;
-						     },
-						    select: function( event, ui ) {						        
+					        $.post(
+					        	url + "Categoria/pesquisarCategoria",
+					        	{
+					        		id_categoria:ui.item.categoria
+					        	}, function( retornoPesquisaCategoria ) {
+					        		retornoPesquisaCategoria = $.parseJSON(retornoPesquisaCategoria);
 
-						        $.post(
-						        	url + "Categoria/pesquisarCategoria",
-						        	{
-						        		id_categoria:ui.item.categoria
-						        	}, function( retornoPesquisaCategoria ) {
-						        		retornoPesquisaCategoria = $.parseJSON(retornoPesquisaCategoria);
+					        		if( retornoPesquisaCategoria != null ) {
+					        			$.each(retornoPesquisaCategoria, function(index, value) {
 
-						        		if( retornoPesquisaCategoria != null ) {
-						        			$.each(retornoPesquisaCategoria, function(index, value) {
+					        				categoria = value['nomeCategoriaProduto'];
+					        				linhaTabela = "<tr>";
+									        linhaTabela += "<td><img src='";
 
-						        				categoria = value['nomeCategoriaProduto'];
-						        				linhaTabela = "<tr>";
-										        linhaTabela += "<td><img src='";
+									        if( ui.item.imagem == "" ) {
+									        	linhaTabela += url + "web-files/imagens/stuffs/image-off.jpg";
+									        } else {
+									        	linhaTabela += ui.item.imagem;
+									        }
 
-										        if( ui.item.imagem == "" ) {
-										        	linhaTabela += url + "web-files/imagens/stuffs/image-off.jpg";
-										        } else {
-										        	linhaTabela += ui.item.imagem;
-										        }
+					        				linhaTabela += "' witdh='50' height='50' class='img-rounded'></td>";
+									        linhaTabela += "<td>" + ui.item.label + "</td>";
+									        linhaTabela += "<td>" + ui.item.preco + "</td>";
+									        linhaTabela += "<td>" + categoria + "</td>";
+									        linhaTabela += "<td><a href='#' id=\"btnRemoveProdutoCardapio_" + ui.item.idProduto + "\"><span class='glyphicon glyphicon-remove'></span></td>";
+									        linhaTabela += "</tr>";
 
-						        				linhaTabela += "' witdh='50' height='50' class='img-rounded'></td>";
-										        linhaTabela += "<td>" + ui.item.label + "</td>";
-										        linhaTabela += "<td>" + ui.item.preco + "</td>";
-										        linhaTabela += "<td>" + categoria + "</td>";
-										        linhaTabela += "<td><a href='#' id=\"btnRemoveProdutoCardapio_" + ui.item.idProduto + "\"><span class='glyphicon glyphicon-remove'></span></td>";
-										        linhaTabela += "</tr>";
+									        $("#tbProdutosCardapio tbody").append(linhaTabela);
 
-										        $("#tbProdutosCardapio tbody").append(linhaTabela);
-
-										       	$("#btnRemoveProdutoCardapio_" + ui.item.idProduto).click( function(event) {
-										       		if( ui.item.idProduto != "" ) {
-														$.post(
-															url + "Produto/removeProduto",
-															{
-																id_produto:ui.item.idProduto
+									       	$("#btnRemoveProdutoCardapio_" + ui.item.idProduto).click( function(event) {
+									       		if( ui.item.idProduto != "" ) {
+													$.post(
+														url + "Produto/removeProduto",
+														{
+															id_produto:ui.item.idProduto
+														},
+														function( retornoExclusaoProduto) {
+															retornoExclusaoProduto = $.parseJSON(retornoExclusaoProduto);
+															if( retornoExclusaoProduto == true ) {						
+																$("#btnRemoveProdutoCardapio_" + ui.item.idProduto).parent().parent().remove();
+															} else {
+																$("#btnRemoveProdutoCardapio_" + ui.item.idProduto).parent().parent().addClass('bg-danger');
 															}
-															function( retornoExclusaoProduto) {
-																retornoExclusaoProduto = $.parseJSON(retornoExclusaoProduto);
-																if( retornoExclusaoProduto == true ) {						
-																	$("#btnRemoveProdutoCardapio_" + ui.item.idProduto).parent().remove();
-																} else {
-																	$("#btnRemoveProdutoCardapio_" + ui.item.idProduto).parent().addClass('bg-danger');
-																}
-															}
-														);
-													}
-										       	});												
-						        			});
-						        		}
-						        	}
-						        );						        						 
-						        return false;
-						    }
-						});
-					}
+														}
+													);
+												}
+									       	});												
+					        			});
+					        		}
+					        	}
+					        );						        						 
+					        return false;
+					    }
+					});
+					
 				}
 			);
 		} else {
