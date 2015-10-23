@@ -77,6 +77,8 @@ $route['Restaurante/pesquisarEventos'] 			= 'AdminController/pesquisarEventos';
 $route['Restaurante/pesquisarMesas'] 			= 'AdminController/pesquisarMesas';
 $route['Restaurante/pesquisarInfoRestaurante'] 	= 'AdminController/pesquisarInfoRestaurante';
 $route['Funcionarios/pesquisarFuncionario'] 	= 'AdminController/pesquisarFuncionario';
+$route['Produtos/pesquisarArrayProdutos'] 		= 'AdminController/pesquisarArrayProdutos';
+
 //---------------------------------------------------------------------------------
 //Stuffs
 $route['UploadImagem'] 	= 'AdminController/UploadImagem';

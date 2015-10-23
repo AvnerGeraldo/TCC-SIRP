@@ -312,6 +312,11 @@ class AdminController extends CI_Controller
 
 	public function cadastrarProduto()
 	{
+		$this->load->model("admin/Categoria_model", "mCategoria");
+
+		$arrayDadosTela = null;
+		$arrayDadosTela['listaCategorias'] = $this->mCategoria->listaCategorias();
+
 		if( isset($_POST['cboCategoria'], $_POST['txtProduto'], $_POST['txtPreco'], $_POST['rbAtivo']) &&
 			!empty($_POST['cboCategoria']) && !empty($_POST['txtProduto']) && !empty($_POST['txtPreco']) &&
 			!empty($_POST['rbAtivo']) ) {
@@ -331,7 +336,7 @@ class AdminController extends CI_Controller
 			}
 			//---------------------------------------------------------------------------------------------------	
 
-			if( isset($_FILES['txtImagem']) && !empty($_FILES['txtImagem']) ) {
+			if( isset($_FILES['txtImagem']['name']) && !empty($_FILES['txtImagem']['name']) ) {
 				//Pasta de destino
 				$diretorioArquivo 	= $_SERVER['DOCUMENT_ROOT']."/sirp/web-files/imagens/restaurantes/{$_SESSION['restaurante']}/";
 				if (!is_dir($diretorioArquivo)) {
@@ -346,11 +351,9 @@ class AdminController extends CI_Controller
 		        }        
 		        //---------------------------------------------------------------------------------------------------------------------------------------------
 		        		        
-				$retornoUpload 	= uploadArquivo($arquivo, $diretorioArquivo);
+				$retornoUpload 	= uploadArquivo($_FILES['txtImagem'], $diretorioArquivo);
 				if( !empty($retornoUpload) ) {
-					$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-warning alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>{$retornoUpload}</div>";
-					$erros++;
-					break;
+					$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-warning alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>{$retornoUpload}</div>";					
 				} else {
 					$nomeImagem = $_FILES['txtImagem']['name'];
 				}
@@ -359,20 +362,39 @@ class AdminController extends CI_Controller
 			if( !isset($_FILES['txtImagem']) || empty($retornoUpload) ) {
 				$arrayProduto 							= null;
 				$arrayProduto['nomeProduto'] 			= $txtProduto;
-				$arrayProduto['descricaoProduto'] 		= auto_typography($txtDescricao);
+				$arrayProduto['descricaoProduto'] 		= ( !empty($txtDescricao) ? ($txtDescricao) : '' );
 				$arrayProduto['valor'] 					= formataValorBanco($txtPreco);
 				$arrayProduto['status'] 				= $rbAtivo;
-				$arrayProduto['imagem'] 				= ( isset($nomeImagem) ? $nomeImagem : '' );
+
+				if( isset($nomeImagem) && !empty($nomeImagem) ) {
+					$arrayProduto['imagem'] 				= $nomeImagem;
+				}
+
 				$arrayProduto['id_categoriaProduto'] 	= $cboCategoria;
 
 				$retornoCadastro = $this->mProduto->cadastrarProduto($arrayProduto);
 				if( $retornoCadastro ) {
-					$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-success alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Produto cadastrado com sucesso!</div>";
+					$arrayDadosTela['exibeMensagem'] 	= "<div class=\"alert alert-success alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Produto cadastrado com sucesso!</div>";
+					$arrayDadosTela['dadosProduto'] 	= $arrayProduto;
+					if( isset($nomeImagem) && !empty($nomeImagem) ) {						
+						$arrayDadosTela['dadosProduto']['imagem'] = base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/produtos/{$nomeImagem}");
+					} else {
+						$listaProduto = $this->mProduto->buscarProduto(null, $arrayProduto['nomeProduto']);						
+						if( !empty($listaProduto) ) {
+							foreach ($listaProduto as $dadosProduto) {
+								if( !empty($dadosProduto['imagem']) ) {
+									$arrayDadosTela['dadosProduto']['imagem'] = base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/produtos/{$dadosProduto['imagem']}");
+								}
+							}
+						}
+					}
 				} else {
 					$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-danger alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Erro ao cadastrar produto. Por favor verifique os dados inseridos!</div>";
 				}
 			}
 
+		} else {
+			$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-warning alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>Preencha os campos corretamente!</div>";
 		}
 
 		$this->load->view("header");
@@ -489,6 +511,46 @@ class AdminController extends CI_Controller
 			extract($_POST);
 
 			$result = $this->mFunc->buscarFuncionario($nomeFunc, $loginFunc, $nivelFunc);
+		}
+
+		echo json_encode($result);
+		exit;
+	}
+
+	public function pesquisarArrayProdutos()
+	{
+		$result = null;
+		
+
+		if( isset($_POST['nomeProduto']) && !empty($_POST['nomeProduto']) ) {
+			$this->load->model("admin/Produto_model", "mProduto");
+			extract($_POST);
+
+			if(! isset($_SESSION) ) {
+				session_start();
+			}
+
+			if(! isset($_SESSION['restaurante']) ) {
+				session_destroy();
+
+				$result = null;
+				echo json_encode($result);
+				exit;
+			}
+
+			$listaProdutos = $this->mProduto->buscarProduto(null, $nomeProduto);
+			if( !empty($listaProdutos) ) {
+				$count = 0;
+				foreach ($listaProdutos as $produto) {
+					$result[$count]['label'] 		= $produto['nomeProduto'];
+					$result[$count]['categoria'] 	= $produto['id_categoriaProduto'];
+					$result[$count]['imagem'] 		= base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/produtos/{$produto['imagem']}");					
+					$result[$count]['descricao'] 	= $produto['descricaoProduto'];
+					$result[$count]['preco'] 		= formataValorExibir($produto['valor']);
+					$result[$count]['ativo'] 		= ( $produto['status'] == 'S' ? TRUE : FALSE );
+					$count++;
+				}
+			}
 		}
 
 		echo json_encode($result);
