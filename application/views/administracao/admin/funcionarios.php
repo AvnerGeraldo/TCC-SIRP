@@ -40,8 +40,8 @@
 			</div>
 			<div class="form-group">				
 				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-7 col-lg-offset-6 col-md-offset-6  col-sm-offset-6 col-xs-offset-5">
-					<button name="btnPesquisar" type="button" class="btn btn-primary">Pesquisar</button>
 					<button name="btnCadastrar" type="submit" class="btn btn-success">Cadastrar</button>
+					<button name="btnPesquisar" type="button" class="btn btn-primary">Pesquisar</button>					
 				</div>
 			</div>
 		</form>
