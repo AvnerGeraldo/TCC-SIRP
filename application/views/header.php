@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>SIRP</title>
+	<link rel="shortcut icon" href="<?=base_url('web-files/imagens/stuffs/favicon.ico')?>" type="image/x-icon"/>
 	<link rel="stylesheet" href="<?=base_url('web-files/lib/jquery-ui/jquery-ui.css')?>">
 	<link rel="stylesheet" href="<?=base_url('web-files/lib/bootstrap/dist/css/bootstrap.css')?>">
 	<link rel="stylesheet" href="<?=base_url('web-files/lib/font-awesome/css/font-awesome.min.css')?>">

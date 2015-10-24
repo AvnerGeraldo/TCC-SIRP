@@ -5,6 +5,7 @@
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 titulo">
 			<center><h3>Eventos</h3></center>
 		</div>
+		<div class="clearfix"></div>
 		<?=( isset($exibeMensagem) ? $exibeMensagem : '' )?>
 		<form name="frmEvento" method="POST" action="<?=base_url('Eventos/cadastrar')?>" enctype="multipart/form-data" class="form-horizontal">
 			<div class="form-group">

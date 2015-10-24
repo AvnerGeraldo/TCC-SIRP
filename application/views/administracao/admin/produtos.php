@@ -12,6 +12,7 @@
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 titulo">
 			<center><h3>Produto</h3></center>
 		</div>
+		<div class="clearfix"></div>
 		<?=( isset($exibeMensagem) ? $exibeMensagem : '' )?>
 		<form name="frmProduto"  action="<?=base_url('Produtos/cadastrar')?>" method="post" enctype="multipart/form-data" class="form-horizontal">
 

@@ -5,6 +5,7 @@
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 titulo">
 			<center><h3>Funcionário</h3></center>
 		</div>
+		<div class="clearfix"></div>
 		<?=( isset($exibeMensagem) ? $exibeMensagem : '' )?>
 		<form name="frmFuncionario" method="POST" action="<?=base_url('Funcionario/cadastrar')?>" class="form-horizontal">
 			<div class="form-group">
