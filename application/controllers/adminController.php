@@ -7,8 +7,24 @@ class AdminController extends CI_Controller
 	{
 		$this->load->view("header");
 		$this->exibeMenu();
-		$this->load->view("administracao/admin/visualizaReserva");
+		$this->load->view("administracao/admin/visualizaReservas");
 		$this->load->view("footer");
+	}
+
+	public function cancelarReservaCliente()
+	{
+		$result = false;
+		if( isset($_POST['id_reserva']) && !empty($_POST['id_reserva']) ) {
+			$this->load->model("admin/Reserva_model", "mReserva");
+			extract($_POST);
+
+			if( !empty($id_reserva) ) {
+				$result = $this->mReserva->cancelarReserva($id_reserva);
+			}
+		}
+
+		echo  json_encode($result);
+		exit;
 	}
 
 	public function restaurante()
@@ -81,6 +97,12 @@ class AdminController extends CI_Controller
 							$arrayDadosTela['exibeMensagem'] = "<div class=\"alert alert-warning alert-dismissible error-message\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\" >&times;</span></button>{$retornoUpload}</div>";
 							$erros++;
 							break;
+						} else {
+							$arrayImagensRestaurante = null;
+							$arrayImagensRestaurante['imagem'] 					= $arrayImagens[$i]['name'];
+							$arrayImagensRestaurante['opt_imagem_principal'] 	= ( $i == 0 ? 'S' : 'N' );
+							$arrayImagensRestaurante['id_restaurante'] 			= $_SESSION['restaurante'];
+							$this->mRest->cadastrarImagemRestaurante($arrayImagensRestaurante);
 						}
 					}	
 				}								
@@ -727,21 +749,75 @@ class AdminController extends CI_Controller
 
 	public function pesquisarReservas()
 	{
+		$arrayReservas 	= null;	
 		if( isset($_POST['statusReserva'], $_POST['rodouScript'], $_POST['dataHora']) ) {
 			$this->load->model("admin/Reserva_model", "mReserva");
+			$this->load->model("admin/Pedido_model", "mPedido");
 			extract($_POST);
+
+			$rodouScript = json_decode($rodouScript);
 
 			if( !$rodouScript ) {
 				$dataHora = null;
 			} else {
 				$dataHora = formataDataBanco($dataHora, 'S');
 			}
-
-			$listaReservas = $this->mReserva->buscarReserva($statusReserva, $dataHora);
+			
+			$listaReservas = $this->mReserva->buscarDadosReserva($statusReserva, $dataHora);
 			if( !empty($listaReservas) ) {
+				$count 			= 0;
+							
+				foreach ($listaReservas as $reserva) {
+					$arrayReservas[$count]['id_reserva']		= $reserva['id_reserva'];
+					$arrayReservas[$count]['dataHora']  		= formataDataExibir($reserva['dataHora'], 'S');
+					$arrayReservas[$count]['statusReserva']  	= $reserva['statusReserva'];
+					$arrayReservas[$count]['nomeCliente']  		= $reserva['nomeCliente'];
+					$arrayReservas[$count]['num_mesa']  		= $reserva['num_mesa'];
+					$arrayReservas[$count]['qtdLugaresMesa']  	= $reserva['qtdLugaresMesa'];
+					$arrayReservas[$count]['taxaMesa']  		= formataValorExibir($reserva['taxaMesa']);
 
+
+					if( !empty($reserva['id_pedido']) ) {
+						$arrayReservas[$count]['id_pedido']			= $reserva['id_pedido'];
+						$arrayReservas[$count]['valorTotal']  		= $reserva['valorTotal'];
+						$arrayReservas[$count]['statusAprovado']	= $reserva['statusAprovado'];
+
+						$listaPedidosReserva = $this->mPedido->listaPedidos($reserva['id_pedido']);
+						if( !empty($listaPedidosReserva) ) {
+							$countPedidos = 0;
+							foreach ($listaPedidosReserva as $pedidoReserva) {
+								if( !isset($arrayReservas[$count]['arrayPedidos'][$countPedidos]) ) {
+									$arrayReservas[$count]['arrayPedidos'][$countPedidos] = null;
+								}
+
+								$arrayReservas[$count]['arrayPedidos'][$countPedidos]['id_pedido']				= $pedidoReserva['id_pedido'];
+								$arrayReservas[$count]['arrayPedidos'][$countPedidos]['valorTotal'] 		 	= formataValorExibir($pedidoReserva['valorTotal']);
+								$arrayReservas[$count]['arrayPedidos'][$countPedidos]['statusAprovado'] 		= $pedidoReserva['statusAprovado'];
+								$arrayReservas[$count]['arrayPedidos'][$countPedidos]['qtd_produto'] 			= $pedidoReserva['qtd_produto'];
+								$arrayReservas[$count]['arrayPedidos'][$countPedidos]['id_produto'] 			= $pedidoReserva['id_produto'];
+								$arrayReservas[$count]['arrayPedidos'][$countPedidos]['nomeProduto'] 			= $pedidoReserva['nomeProduto'];
+								$arrayReservas[$count]['arrayPedidos'][$countPedidos]['valor'] 					= formataValorExibir($pedidoReserva['valor']);
+								$arrayReservas[$count]['arrayPedidos'][$countPedidos]['imagem'] 				= $pedidoReserva['imagem'];
+								$arrayReservas[$count]['arrayPedidos'][$countPedidos]['status'] 				= $pedidoReserva['status'];
+								$arrayReservas[$count]['arrayPedidos'][$countPedidos]['nomeCategoriaProduto'] 	= $pedidoReserva['nomeCategoriaProduto'];	
+								$countPedidos++;
+							}
+						}
+
+						
+					} else {
+						$arrayReservas[$count]['id_pedido']			= '';
+						$arrayReservas[$count]['valorTotal']  		= '';
+						$arrayReservas[$count]['statusAprovado']	= '';
+						$arrayReservas[$count]['arrayPedidos']		= '';
+					}
+					$count++;
+				}
 			}
 		}
+
+		echo json_encode($arrayReservas);
+		exit;
 	}
 
 	//--------------------------------------------------------------------------------------------------------------
@@ -770,6 +846,11 @@ class AdminController extends CI_Controller
 		}
 		foreach ($listaRestaurante as $dadosRestaurante) {
 			$arrayDadosTela['nomeRestaurante']		= $dadosRestaurante['nomeRestaurante'];
+			$listaImagemPrincipal = $this->mRest->listaImagensRestaurante($_SESSION['restaurante'], null, 'S');
+			if( !empty($listaImagemPrincipal) && isset($listaImagemPrincipal[0]['imagem']) && !empty($listaImagemPrincipal[0]['imagem'])) {
+				$arrayDadosTela['imagemRestaurante']	= base_url("web-files/imagens/restaurantes/{$_SESSION['restaurante']}/imagens/{$listaImagemPrincipal[0]['imagem']}");
+
+			}
 		}		
 		//------------------------------------------------------------------------------------		
 		$this->load->view("menu", $arrayDadosTela);

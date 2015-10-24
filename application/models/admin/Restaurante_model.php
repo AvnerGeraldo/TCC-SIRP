@@ -42,6 +42,28 @@ class Restaurante_model extends CI_Model
 		return $result;
 	}
 
+	public function listaImagensRestaurante($id_restaurante, $nomeImagem = null, $imgPrincipal = null)
+	{
+		$result = null;
+		
+		$this->_db->where("id_restaurante", $id_restaurante);
+
+		if( !empty($imgPrincipal) )	 {
+			$this->_db->where("opt_imagem_principal", $imgPrincipal);
+		}
+
+		if( !empty($nomeImagem) )	 {
+			$this->_db->where("imagem", $nomeImagem);
+		}
+
+		$query = $this->_db->get("imagemrestaurante");
+		if( $query->num_rows() > 0 ) {
+			$result = $query->result_array();
+		}
+
+		return $result;
+	}
+
 	public function cadastrarRestaurante($arrayRestaurante)
 	{
 		$result 		= null;
@@ -62,6 +84,33 @@ class Restaurante_model extends CI_Model
 			}			
 		} else {
 			$result = $this->_db->insert("restaurante", $arrayRestaurante);
+		}
+		return $result;
+	}
+
+	public function cadastrarImagemRestaurante($arrayImagens)
+	{
+		$result 		= null;
+
+		if( $arrayImagens['opt_imagem_principal'] == 'S' ) {
+			$listaImagensRestaurante 	= $this->listaImagensRestaurante( $arrayImagens['id_restaurante'], null, 'S');
+			if( !empty($listaImagensRestaurante) ) {
+				$this->_db->where("id_restaurante", $rest['id_restaurante']);
+				$this->_db->where("opt_imagem_principal", 'S');
+				$this->_db->where("id_imagem", $listaImagensRestaurante[0]['id_imagem']);
+				$this->_db->update("restaurante", array('opt_imagem_principal' => 'N'));
+			}
+		}
+		
+		$listaImagensRestaurante 	= $this->listaImagensRestaurante( $arrayImagens['id_restaurante'], $arrayImagens['imagem']);
+		if( !empty($listaImagensRestaurante) ) {
+			foreach ($listaImagensRestaurante as $rest) {
+				$this->_db->where("id_restaurante", $rest['id_restaurante']);
+				$this->_db->where("id_imagem", $rest['id_imagem']);
+				$result = $this->_db->update("imagemrestaurante", $arrayImagens);
+			}			
+		} else {
+			$result = $this->_db->insert("imagemrestaurante", $arrayImagens);
 		}
 		return $result;
 	}

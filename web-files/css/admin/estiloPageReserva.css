@@ -1,0 +1,26 @@
+.headerReservaPedido span.glyphicon-remove {
+    font-size: 30px;
+    margin-top: 16px;
+}
+
+.num_mesa {
+	font-size: 25px;
+    font-weight: bold;
+}
+
+button {
+	float: right;
+}
+
+button[name='btnCadastrar'] {
+	margin-left: 20px;
+}
+
+button[name='btnCadastraInfoRestaurante'] {
+	margin-right: 90px;
+}
+
+.titulo {
+	margin-bottom: 40px;
+	margin-top: 5px;
+}

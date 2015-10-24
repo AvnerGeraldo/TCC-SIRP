@@ -5,11 +5,12 @@
 ?>
 <link rel="stylesheet" href="<?=base_url('web-files/css/admin/estiloPageAdmin.css')?>">
 <link rel="stylesheet" href="<?=base_url('web-files/css/admin/estiloAutoComplete.css')?>">
+<link rel="stylesheet" href="<?=base_url('web-files/css/admin/estiloPageReserva.css')?>">
 <div class="container-fluid well">
 	<div class="col-lg-8 col-md-8 col-sm-9 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
-		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 titulo">
 			<center><h3>Cardápio</h3></center>
-		</div><br><br><br><br>
+		</div>
 		<?=( isset($exibeMensagem) ? $exibeMensagem : '' )?>
 		<form name="frmProduto"  action="<?=base_url('Cardapio/cadastrar')?>" method="post" enctype="multipart/form-data" class="form-horizontal">
 
@@ -42,7 +43,7 @@
 				</div>
 
 			<div class="form-group">				
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-7 col-lg-offset-7 col-md-offset-7  col-sm-offset-7 col-xs-offset-6">					
+				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-7 col-lg-offset-4 col-md-offset-4  col-sm-offset-4 col-xs-offset-3">					
 					<button name="btnCadastrar" type="submit" class="btn btn-success">Cadastrar</button>
 				</div>
 			</div>

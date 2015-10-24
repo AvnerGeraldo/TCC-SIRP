@@ -1,6 +1,10 @@
 <link rel="stylesheet" href="<?=base_url('web-files/css/admin/estiloPageAdmin.css')?>">
+<link rel="stylesheet" href="<?=base_url('web-files/css/admin/estiloPageReserva.css')?>">
 <div class="container-fluid well">
 	<div class="col-lg-8 col-md-8 col-sm-9 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 titulo">
+			<center><h3>Eventos</h3></center>
+		</div>
 		<?=( isset($exibeMensagem) ? $exibeMensagem : '' )?>
 		<form name="frmEvento" method="POST" action="<?=base_url('Eventos/cadastrar')?>" enctype="multipart/form-data" class="form-horizontal">
 			<div class="form-group">
@@ -44,9 +48,9 @@
 				</div>
 			</div>
 
-			<div class="form-group">
-				<button type="button" name="btnPesquisar" class="btn btn-primary">Pesquisar</button>
+			<div class="form-group col-lg-10 col-md-10 col-sm-10 col-xs-10">				
 				<button type="submit" name="btnCadastrar" class="btn btn-success">Cadastrar</button>
+				<button type="button" name="btnPesquisar" class="btn btn-primary">Pesquisar</button>
 			</div>
 		</form>
 

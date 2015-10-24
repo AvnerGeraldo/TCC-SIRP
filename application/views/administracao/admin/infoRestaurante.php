@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="<?=base_url('web-files/css/admin/estiloPageAdmin.css')?>">
 <link rel="stylesheet" href="<?=base_url('web-files/css/admin/estiloPageInfoRestaurante.css')?>">
+
 <div class="container-fluid well">
     <div class="col-lg-8 col-md-8 col-sm-9 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
         <div class="panel with-nav-tabs panel-primary">
@@ -155,8 +156,8 @@
                                     </div>                                  
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <button type="submit" name="btnCadastraInfoRestaurante" class="btn btn-success">Cadastrar Restaurante</button>
+                            <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-6 col-lg-offset-7 col-md-offset-7 col-sm-offset-7 col-xs-offset-6">
+                                <button type="submit" name="btnCadastraInfoRestaurante" style="float: right;" class="btn btn-success">Cadastrar Restaurante</button>
                             </div>
                         </form>                       
                     </div>

@@ -53,26 +53,28 @@ $route['default_controller'] 		= 'AcessoController';
 $route['Logoff'] 					= 'AcessoController/logoff';
 
 //Exibir páginas
-$route['Restaurante'] 				= 'AdminController/restaurante';
-$route['Eventos'] 					= 'AdminController/eventos';
-$route['Funcionarios'] 				= 'AdminController/funcionario';
-$route['Produtos'] 					= 'AdminController/produto';
-$route['Cardapio'] 					= 'AdminController/cardapio';
-$route['Reservas'] 					= 'AdminController/visualizaReserva';
+$route['Restaurante'] 							= 'AdminController/restaurante';
+$route['Eventos'] 								= 'AdminController/eventos';
+$route['Funcionarios'] 							= 'AdminController/funcionario';
+$route['Produtos'] 								= 'AdminController/produto';
+$route['Cardapio'] 								= 'AdminController/cardapio';
+$route['Reservas'] 								= 'AdminController/visualizaReserva';
 //---------------------------------------------------------------------------------
 
 //Cadastros
-$route['Restaurante/cadastrar'] 	= 'AdminController/cadastrarRestaurante';
-$route['Restaurante/cadastrarMesa'] = 'AdminController/cadastrarMesa';
-$route['Eventos/cadastrar'] 		= 'AdminController/cadastrarEvento';
-$route['Funcionario/cadastrar'] 	= 'AdminController/cadastrarFuncionario';
-$route['Produtos/cadastrar'] 		= 'AdminController/cadastrarProduto';
-$route['Cardapio/cadastrar'] 		= 'AdminController/cadastrarCardapio';
+$route['Restaurante/cadastrar'] 				= 'AdminController/cadastrarRestaurante';
+$route['Restaurante/cadastrarMesa'] 			= 'AdminController/cadastrarMesa';
+$route['Eventos/cadastrar'] 					= 'AdminController/cadastrarEvento';
+$route['Funcionario/cadastrar'] 				= 'AdminController/cadastrarFuncionario';
+$route['Produtos/cadastrar'] 					= 'AdminController/cadastrarProduto';
+$route['Cardapio/cadastrar'] 					= 'AdminController/cadastrarCardapio';
 //---------------------------------------------------------------------------------
 
 //Excluir
-$route['Funcionario/excluir'] 		= 'AdminController/excluirFuncionario';
-$route['Produto/removeProduto'] 	= 'AdminController/excluirProduto';
+$route['Funcionario/excluir'] 					= 'AdminController/excluirFuncionario';
+$route['Produto/removeProduto'] 				= 'AdminController/excluirProduto';
+$route['Reservas/cancelarReservaCliente'] 		= 'AdminController/cancelarReservaCliente';
+
 //---------------------------------------------------------------------------------
 
 
@@ -84,6 +86,7 @@ $route['Funcionarios/pesquisarFuncionario'] 	= 'AdminController/pesquisarFuncion
 $route['Produtos/pesquisarArrayProdutos'] 		= 'AdminController/pesquisarArrayProdutos';
 $route['Cardapio/pesquisarArrayCardapio'] 		= 'AdminController/pesquisarArrayCardapio';
 $route['Categoria/pesquisarCategoria'] 			= 'AdminController/pesquisarCategoria';
+$route['Reservas/pesquisarReservas'] 			= 'AdminController/pesquisarReservas';
 
 //---------------------------------------------------------------------------------
 //Stuffs

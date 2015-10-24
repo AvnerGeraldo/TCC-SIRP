@@ -1,7 +1,7 @@
 <div class="nav-side-menu">
 	<div class="brand">
 		<div class="img-avatar">
-			<img src="<?=base_url('web-files/imagens/login/avatar.png')?>" class="img-circle">
+			<img src="<?=( isset($imagemRestaurante) && !empty($imagemRestaurante) ? $imagemRestaurante : base_url('web-files/imagens/login/avatar.png') )?>" width="150" height="100" <?=( isset($imagemRestaurante) && !empty($imagemRestaurante) ? "class=\"img-rounded\"" : "class=\"img-circle\"" ) ?>>
 		</div>
 		<div class="restaurante-avatar">
 			<span><?=ucfirst($nomeRestaurante)?></span>
